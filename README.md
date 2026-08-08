@@ -22,9 +22,10 @@ local embeddings), no paid APIs.*
 
 ## What this project demonstrates
 
-- **Hybrid retrieval done properly** — dense (FAISS) + sparse (BM25) fused with
-  reciprocal rank fusion, with a tunable weight. Dense-only and sparse-only paths
-  stay live so you can A/B them in the UI and see when each wins.
+- **A full retrieval stack** — **semantic chunking** (split on meaning, not fixed
+  length) → **hybrid retrieval** (dense FAISS ⊕ sparse BM25, fused with reciprocal
+  rank fusion) → an optional **cross-encoder reranker** → optional **LLM query
+  rewriting**. Each stage is toggleable so you can measure its contribution.
 - **A real evaluation harness**, not vibes — hit-rate@k, MRR, precision/recall
   against a labelled golden set, plus LLM-as-judge scoring for faithfulness and
   answer relevancy, plus a human-vs-judge calibration step. Numbers come from
@@ -42,46 +43,53 @@ local embeddings), no paid APIs.*
 ## How it works
 
 ```
-          ingest (PDF text + OCR'd diagrams) → chunk → embed → FAISS + BM25 index
-                                                                      │
-  question ─► hybrid retrieve (dense ⊕ sparse, RRF) ─► top-k chunks ──┤
-                                                                      ▼
-                             generate answer (grounded prompt) ─► LLM-as-judge
-                                                                      │
-                              faithfulness guardrail ◄────────────────┘
+   ingest → semantic chunk → embed → FAISS (dense) + BM25 (sparse) index
+                                                          │
+  question ─►[optional rewrite]─► hybrid retrieve (RRF) ─►│─► [optional rerank] ─► top-k
+                                                                                     │
+                              generate answer (grounded prompt) ◄────────────────────┘
+                                        │
+                              LLM-as-judge faithfulness guardrail
                                         │
                             answer + ranked sources + groundedness score
 ```
 
 ## Evaluation results
 
-Real run over a 22-question labelled golden set (`k=4`, `alpha=0.5`):
+Real run over a 22-question labelled golden set (`k=4`, `alpha=0.5`), showing each
+retrieval stage's contribution:
 
-| mode   | hit-rate@k | MRR   | precision@k | recall@k |
-|--------|-----------:|------:|------------:|---------:|
-| dense  | 1.000      | 0.936 | 0.511       | 1.000    |
-| hybrid | 1.000      | 0.947 | 0.455       | 1.000    |
+| retrieval        | hit-rate@k | MRR       | precision@k | recall@k |
+|------------------|-----------:|----------:|------------:|---------:|
+| dense only       | 0.955      | 0.864     | 0.511       | 0.955    |
+| + sparse (hybrid)| 1.000      | 0.966     | 0.500       | 1.000    |
+| + reranker       | 1.000      | **1.000** | 0.489       | 1.000    |
 
-Mean faithfulness **4.86/5**, mean relevancy **4.68/5**, and **1/22** answers
-guardrail-flagged — a genuine caught hallucination where the model hedged into a
-claim the source contradicts.
+Generation (hybrid path): mean faithfulness **5.00/5**, mean relevancy **4.59/5**,
+0 answers flagged — every answer was traceable to its sources.
 
-**The honest read:** on this small, cleanly-separated corpus hybrid and dense are
-close — hybrid edges dense on MRR while dense wins on precision, because dense
-alone already hits perfect recall and mixing in BM25 just reshuffles the tail.
-The value isn't "hybrid always wins" — it's that the harness *measures* the
-tradeoff so you can tune per corpus. Bigger, noisier corpora with exact-keyword
-queries (error codes, API paths) are where sparse retrieval earns its place.
+**The honest read:** there's a real, measured progression — sparse retrieval lifts
+hit-rate from 0.955 to 1.000 (BM25 catches exact-term matches like error codes
+that dense embeddings miss), and the reranker lifts MRR to a perfect 1.000 (the
+correct chunk lands at rank 1 for every question). Precision dips slightly because
+each question usually has one relevant chunk but `k=4`. The point of the harness
+is that it *measures* each stage so the additions are justified, not cargo-culted.
+
+*(The guardrail shows 0 flags here because every generated answer was faithful;
+its catch is demonstrable live — the "credit card" sample question makes the
+model hedge into an unsupported claim, and the guardrail flags it.)*
 
 ## Engineering decisions worth calling out
 
 This runs end-to-end on free infrastructure, which forced some deliberate calls:
 
-- **fastembed (ONNX) instead of torch** for embeddings — same MiniLM model,
-  ~200 MB instead of ~1 GB, so it fits a free 512 MB host and starts fast.
-- **Smaller judge model + smarter flag logic** — the guardrail flags on a low
-  score *or* any unsupported claim the judge names, which keeps detection
-  reliable on a lightweight model and stretches the shared token budget.
+- **fastembed (ONNX) instead of torch** for embeddings *and* reranking — same
+  MiniLM models, ~200 MB instead of ~1 GB, so the whole stack (including the
+  cross-encoder) fits a free 512 MB host and starts fast.
+- **Two-tier judging** — the live per-request guardrail runs the fast 8B model
+  (and flags on a low score *or* any unsupported claim it names, which stays
+  reliable on a small model); the offline eval uses the stronger 70B judge for
+  more credible scoring. Cheap where it's hot, accurate where it can afford to be.
 - **Graceful degradation** — a rate-limited judge returns the answer marked
   "check unavailable" rather than dropping a successful generation; all model
   calls go through a concurrency gate with retry/backoff.
@@ -101,14 +109,16 @@ The FAISS index and BM25 corpus are committed, so it runs without a rebuild
 (`python ingest.py` rebuilds from the PDFs in `data/`).
 
 ```bash
-python eval.py --skip-calibration   # regenerate the metrics report
+# regenerate the report (70B judge reproduces the numbers above; omit it for the fast 8B judge)
+GROQ_JUDGE_MODEL=llama-3.3-70b-versatile python eval.py --skip-calibration
 python test_metrics.py              # offline unit checks for the metric math
 ```
 
 ## Tech stack
 
-Python · FastAPI · LangChain · FAISS · rank-bm25 · fastembed (ONNX) ·
-Groq (Llama 3.1) · Tesseract OCR · vanilla JS · Docker / Render
+Python · FastAPI · LangChain · FAISS · rank-bm25 · fastembed (ONNX embeddings +
+cross-encoder reranker) · semantic chunking · Groq (Llama 3.1 / 3.3) ·
+Tesseract OCR · vanilla JS · Render
 
 ## Scope & limitations
 
@@ -121,6 +131,5 @@ Deliberately a focused demo, not a production system:
   graceful degradation keep normal traffic healthy, but a heavy burst will queue
   or skip the faithfulness check. No auth or monitoring.
 
-*(The committed eval report was generated with a larger judge model; the live
-demo defaults to a smaller one to stretch the free token budget. Re-run
-`eval.py` with any `GROQ_JUDGE_MODEL` to regenerate.)*
+- Query rewriting and reranking are opt-in per request (they add an LLM call /
+  a second model load), off by default to protect the shared free-tier budget.

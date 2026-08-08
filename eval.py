@@ -47,12 +47,20 @@ def score_retrieval(item, retrieved_chunks):
     return {"hit": hit, "reciprocal_rank": rr, "precision": precision, "recall": recall}
 
 
+# retrieval configurations compared side by side in the report
+RETRIEVAL_CONFIGS = [
+    ("dense", {"mode": "dense"}),
+    ("hybrid", {"mode": "hybrid"}),
+    ("hybrid+rerank", {"mode": "hybrid", "rerank": True}),
+]
+
+
 def run_retrieval_eval(retriever, golden, k, alpha):
-    results = {"dense": [], "hybrid": []}
+    results = {label: [] for label, _ in RETRIEVAL_CONFIGS}
     for item in golden:
-        for mode in results:
-            chunks = retriever.retrieve(item["question"], k=k, mode=mode, alpha=alpha)
-            results[mode].append({"id": item["id"], **score_retrieval(item, chunks)})
+        for label, kw in RETRIEVAL_CONFIGS:
+            chunks = retriever.retrieve(item["question"], k=k, alpha=alpha, **kw)
+            results[label].append({"id": item["id"], **score_retrieval(item, chunks)})
 
     summary = {}
     for mode, rows in results.items():

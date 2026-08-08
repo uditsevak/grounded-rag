@@ -311,6 +311,35 @@ body {
 
 .dial__value { font-family: var(--mono); font-size: 12px; color: var(--mist); }
 
+/* pipeline toggles (rerank / rewrite) */
+.toggles { display: flex; flex-direction: column; gap: 7px; }
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--mist);
+  cursor: pointer;
+}
+.toggle input { accent-color: var(--brass); width: 15px; height: 15px; cursor: pointer; }
+.toggle input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.toggle:hover { color: #eaf1f6; }
+
+.pipeline-note {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--brass);
+}
+.pipeline-note code {
+  color: #eaf1f6;
+  background: rgba(224, 164, 65, 0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
 /* ask button */
 .ask__go {
   margin-left: auto;

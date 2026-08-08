@@ -28,6 +28,8 @@ class AskRequest(BaseModel):
     mode: str = Field(default="hybrid", pattern="^(hybrid|dense|sparse)$")
     k: int = Field(default=4, ge=1, le=10)
     alpha: float = Field(default=0.5, ge=0.0, le=1.0)
+    rerank: bool = False
+    rewrite: bool = False
     corpus_id: str | None = Field(default=None, max_length=64)
 
     @field_validator("question")
@@ -67,7 +69,10 @@ def ask(req: AskRequest):
             raise HTTPException(status_code=404, detail="That uploaded document expired — upload it again.")
 
     try:
-        result = rag_answer(req.question, active, mode=req.mode, k=req.k, alpha=req.alpha)
+        result = rag_answer(
+            req.question, active, mode=req.mode, k=req.k, alpha=req.alpha,
+            rerank=req.rerank, rewrite=req.rewrite,
+        )
     except Exception:
         # don't leak provider stack traces to a public endpoint
         raise HTTPException(status_code=502, detail="The model backend failed. Try again.")
@@ -79,6 +84,8 @@ def ask(req: AskRequest):
         "mode": req.mode,
         "k": req.k,
         "alpha": req.alpha,
+        "reranked": result["reranked"],
+        "rewritten_query": result["rewritten_query"],
         "sources": [
             {
                 "rank": i + 1,

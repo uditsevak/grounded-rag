@@ -20,10 +20,13 @@ const readingNote = document.getElementById("reading-note");
 const sourcesList = document.getElementById("sources");
 const sourceCount = document.getElementById("source-count");
 const rankBy = document.getElementById("rank-by");
+const rerankInput = document.getElementById("rerank");
+const rewriteInput = document.getElementById("rewrite");
+const pipelineNote = document.getElementById("pipeline-note");
 
 const RANK_LABEL = { hybrid: "fusion", dense: "cosine similarity", sparse: "BM25 score" };
 
-const DEMO_CORPUS_TEXT = "6 documents · 21 chunks · dense FAISS + sparse BM25";
+const DEMO_CORPUS_TEXT = "6 documents · 27 chunks · dense FAISS + sparse BM25";
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
 // upload elements
@@ -220,8 +223,19 @@ function renderResult(data) {
     }
   }
 
-  rankBy.textContent = RANK_LABEL[data.mode] || data.mode;
+  rankBy.textContent = data.reranked
+    ? `${RANK_LABEL[data.mode] || data.mode} → cross-encoder rerank`
+    : RANK_LABEL[data.mode] || data.mode;
   sourceCount.textContent = data.sources.length;
+
+  if (data.rewritten_query) {
+    pipelineNote.hidden = false;
+    pipelineNote.innerHTML = `retrieved with rewritten query <code>${escapeHtml(data.rewritten_query)}</code>`;
+  } else {
+    pipelineNote.hidden = true;
+    pipelineNote.textContent = "";
+  }
+
   renderSources(data.sources);
 }
 
@@ -258,6 +272,8 @@ form.addEventListener("submit", async (e) => {
     mode: form.querySelector('input[name="mode"]:checked').value,
     k: Number(kValue.textContent),
     alpha: Number(alphaInput.value),
+    rerank: rerankInput.checked,
+    rewrite: rewriteInput.checked,
     corpus_id: corpusId,
   };
 

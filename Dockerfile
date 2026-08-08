@@ -15,8 +15,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=app:app . .
 USER app
 
-# bake the embedding model into the image so first request isn't a cold download
-RUN python -c "from fastembed import TextEmbedding; TextEmbedding('sentence-transformers/all-MiniLM-L6-v2')"
+# bake the embedding + reranker models into the image so first use isn't a cold download
+RUN python -c "from fastembed import TextEmbedding; TextEmbedding('sentence-transformers/all-MiniLM-L6-v2')" \
+ && python -c "from fastembed.rerank.cross_encoder import TextCrossEncoder; TextCrossEncoder('Xenova/ms-marco-MiniLM-L-6-v2')"
 
 EXPOSE 7860
 CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "7860"]

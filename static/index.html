@@ -22,7 +22,7 @@
       <div class="corpusbar">
         <p class="corpus" id="corpus-line" aria-label="Indexed corpus">
           <span class="corpus__dot" id="corpus-dot" aria-hidden="true"></span>
-          <span id="corpus-text">6 documents · 21 chunks · dense FAISS + sparse BM25</span>
+          <span id="corpus-text">6 documents · 27 chunks · dense FAISS + sparse BM25</span>
         </p>
         <div class="corpus__actions">
           <button type="button" class="linkbtn" id="upload-btn">+ your document</button>
@@ -68,6 +68,12 @@
             <label class="control__label" for="alpha">Fusion α <span class="dial__hint">dense weight</span></label>
             <input type="range" id="alpha" min="0" max="1" step="0.05" value="0.5" />
             <output class="dial__value" id="alpha-value" for="alpha">0.50</output>
+          </div>
+
+          <div class="toggles">
+            <span class="control__label">Pipeline</span>
+            <label class="toggle"><input type="checkbox" id="rerank" /> <span>rerank</span></label>
+            <label class="toggle"><input type="checkbox" id="rewrite" /> <span>rewrite query</span></label>
           </div>
 
           <button type="submit" class="ask__go" id="ask-go">
@@ -148,6 +154,7 @@
         <p class="provenance__eyebrow">
           Provenance — <span id="source-count">0</span> sources, ranked by <span id="rank-by">fusion</span>
         </p>
+        <p class="pipeline-note" id="pipeline-note" hidden></p>
         <ol class="sources" id="sources"></ol>
       </div>
     </section>

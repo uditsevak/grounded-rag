@@ -17,6 +17,11 @@ FUSION_POOL_SIZE = 20
 # standard RRF smoothing constant (Cormack et al.) — dampens the impact of rank 1.
 RRF_K = 60
 
+# Optional cross-encoder reranker (fastembed ONNX, ~80MB, no torch). When on, we
+# retrieve a wider pool then re-score each (query, chunk) pair and keep the top-k.
+RERANK_MODEL = "Xenova/ms-marco-MiniLM-L-6-v2"
+RERANK_POOL_SIZE = 15
+
 
 class HybridRetriever:
     def __init__(self):
@@ -46,6 +51,21 @@ class HybridRetriever:
             cid: {"chunk_id": cid, "text": text, **meta}
             for cid, text, meta in zip(ids, texts, metadatas)
         }
+        self._reranker = None  # loaded lazily on first rerank
+
+    def _get_reranker(self):
+        if self._reranker is None:
+            from fastembed.rerank.cross_encoder import TextCrossEncoder
+
+            self._reranker = TextCrossEncoder(RERANK_MODEL)
+        return self._reranker
+
+    def rerank(self, query, chunks, k):
+        if not chunks:
+            return chunks
+        scores = list(self._get_reranker().rerank(query, [c["text"] for c in chunks]))
+        ranked = sorted(zip(chunks, scores), key=lambda cs: cs[1], reverse=True)[:k]
+        return [{**c, "rerank_score": float(s)} for c, s in ranked]
 
     def retrieve_dense(self, query, k=4):
         results = self.vectorstore.similarity_search_with_score(query, k=k)
@@ -82,11 +102,19 @@ class HybridRetriever:
         ranked_ids = sorted(fused_scores, key=lambda cid: fused_scores[cid], reverse=True)[:k]
         return [{**self.id_to_chunk[cid], "score": fused_scores[cid]} for cid in ranked_ids]
 
-    def retrieve(self, query, k=4, mode="hybrid", alpha=0.5):
+    def retrieve(self, query, k=4, mode="hybrid", alpha=0.5, rerank=False):
+        # when reranking, pull a wider pool first so the cross-encoder has more to
+        # re-score, then cut to k.
+        pool_k = RERANK_POOL_SIZE if rerank else k
         if mode == "dense":
-            return self.retrieve_dense(query, k=k)
-        if mode == "sparse":
-            return self.retrieve_sparse(query, k=k)
-        if mode == "hybrid":
-            return self.retrieve_hybrid(query, k=k, alpha=alpha)
-        raise ValueError(f"unknown mode: {mode}")
+            hits = self.retrieve_dense(query, k=pool_k)
+        elif mode == "sparse":
+            hits = self.retrieve_sparse(query, k=pool_k)
+        elif mode == "hybrid":
+            hits = self.retrieve_hybrid(query, k=pool_k, alpha=alpha)
+        else:
+            raise ValueError(f"unknown mode: {mode}")
+
+        if rerank:
+            hits = self.rerank(query, hits, k)
+        return hits
