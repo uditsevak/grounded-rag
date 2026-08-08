@@ -24,11 +24,15 @@ git push -u origin main
 
 ## B. Hugging Face Space (live demo)
 
+HF's **Docker** SDK is now paid, so we deploy on the free **Gradio** SDK. Our
+app isn't a Gradio UI — `app.py` is a shim that runs our FastAPI server on the
+free Gradio Space (see the "How the Gradio shim works" note below).
+
 1. **Write token** — create one at https://huggingface.co/settings/tokens
    (role: *Write*). Copy it.
 2. **Create the Space** — https://huggingface.co/new-space
    - Owner: you · Space name: `grounded-rag`
-   - SDK: **Docker** → *Blank* template
+   - SDK: **Gradio** → *Blank* template
    - Visibility: **Public**
 3. **Add the secret** — on the new Space: *Settings → Variables and secrets →
    New secret* → name `GROQ_API_KEY`, value = your Groq key.
@@ -48,13 +52,21 @@ git push -u origin main
    `git push origin main` (and `git push hf main`) so the GitHub page links to
    the live Space.
 
-## Config that's already set for you
+## How the Gradio shim works
 
-- `README.md` has the HF frontmatter (`sdk: docker`, `app_port: 7860`).
-- `Dockerfile` runs `uvicorn server:app` on 7860 and pre-downloads the
-  embedding model so the first request isn't a cold download.
-- The FAISS index + BM25 corpus are committed (44 KB), so the container serves
+- `README.md` frontmatter is `sdk: gradio`, `app_file: app.py`.
+- `app.py` imports our FastAPI `app` from `server.py` and runs it with uvicorn
+  on port 7860. A placeholder Gradio app is mounted only so the Gradio-SDK image
+  is satisfied; gradio is wrapped in try/except, so if its dependencies clash
+  with our pinned web stack the mount is skipped and FastAPI still serves the
+  whole site.
+- The FAISS index + BM25 corpus are committed (44 KB), so the Space serves
   without rebuilding the index.
+- `sdk_version` in the frontmatter is set to `5.9.1`. **If the build rejects it**
+  ("invalid sdk_version"), the error lists valid versions — set it to one of
+  those and re-push. That's the one value I couldn't verify against HF.
+- The `Dockerfile` is kept for reference / alternative hosts (Cloud Run, a
+  paid Docker Space); it isn't used by the Gradio Space.
 
 ## Heads-up
 
