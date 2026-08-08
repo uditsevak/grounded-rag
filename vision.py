@@ -13,9 +13,19 @@ import pytesseract
 from PIL import Image
 
 
+def _preprocess(img):
+    """Grayscale + upscale small rasters. Tesseract wants ~300 DPI; embedded
+    diagram/screenshot images are usually small, and OCR on them is noisy until
+    they're scaled up. Skip upscaling images that are already large."""
+    img = img.convert("L")
+    if max(img.size) < 1200:
+        img = img.resize((img.size[0] * 3, img.size[1] * 3), Image.LANCZOS)
+    return img
+
+
 def caption_image(image_bytes: bytes, mime_type: str = "image/png") -> str:
     try:
-        img = Image.open(io.BytesIO(image_bytes))
+        img = _preprocess(Image.open(io.BytesIO(image_bytes)))
         text = pytesseract.image_to_string(img).strip()
     except Exception as e:
         print(f"  [OCR failed: {e}; using placeholder]")
