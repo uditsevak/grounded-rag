@@ -33,8 +33,17 @@ const uploadBtn = document.getElementById("upload-btn");
 const resetBtn = document.getElementById("reset-btn");
 const fileInput = document.getElementById("file-input");
 const uploadNote = document.getElementById("upload-note");
+const starter = document.getElementById("starter");
 
 let corpusId = null; // null => shared demo corpus
+
+// sample questions: fill the field and ask (demo corpus only)
+document.querySelectorAll(".sample").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    field.value = btn.dataset.q;
+    form.requestSubmit();
+  });
+});
 
 // --- gauge dial: draw the 0..5 ticks once ---
 (function drawTicks() {
@@ -90,6 +99,7 @@ function useDemoCorpus() {
   corpusbar.dataset.custom = "false";
   corpusText.textContent = DEMO_CORPUS_TEXT;
   resetBtn.hidden = true;
+  starter.hidden = false; // Nimbus samples only make sense on the demo corpus
   setNote("", null);
 }
 
@@ -120,6 +130,7 @@ fileInput.addEventListener("change", async () => {
     corpusbar.dataset.custom = "true";
     corpusText.textContent = `${data.filename} · ${data.chunks} chunks · your document`;
     resetBtn.hidden = false;
+    starter.hidden = true; // hide Nimbus-specific samples while querying an upload
     setNote(`Indexed ${data.filename}. Ask it anything below.`, null);
   } catch (err) {
     setNote(err.message || "Upload failed.", "error");

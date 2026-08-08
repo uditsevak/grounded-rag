@@ -334,6 +334,90 @@ body {
 .ask__go:focus-visible { outline: 2px solid #eef4f8; outline-offset: 3px; }
 .ask__go[disabled] { opacity: 0.55; cursor: progress; box-shadow: none; }
 
+/* ---------- starter: about the corpus + sample questions ---------- */
+.starter { margin-top: clamp(30px, 5vw, 52px); }
+
+.about { margin-bottom: 22px; }
+
+.about__summary {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--brass);
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.about__summary::-webkit-details-marker { display: none; }
+.about__summary::before { content: "▸"; color: var(--mist-2); transition: transform 0.2s ease; }
+.about[open] .about__summary::before { transform: rotate(90deg); }
+.about__summary:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 3px; }
+
+.about__body {
+  margin-top: 12px;
+  max-width: 62ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--mist);
+}
+.about__body p { margin: 0 0 8px; }
+.about__body strong { color: #eaf1f6; }
+
+.about__docs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.about__docs li { padding-left: 14px; position: relative; }
+.about__docs li::before { content: "—"; position: absolute; left: 0; color: var(--mist-2); }
+.about__docs b { font-family: var(--mono); font-size: 12.5px; color: var(--brass); font-weight: 500; }
+
+.samples__label {
+  margin: 0 0 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mist-2);
+}
+
+.samples { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.sample {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(8, 20, 31, 0.5);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 9px 13px;
+  color: #dbe6ee;
+  font-family: var(--serif);
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, transform 0.12s ease;
+}
+.sample:hover { border-color: var(--brass); background: rgba(224, 164, 65, 0.08); }
+.sample:active { transform: translateY(1px); }
+.sample:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+.sample__facet {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass);
+  background: var(--brass-soft);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
 /* ---------- result ---------- */
 .result {
   margin-top: clamp(38px, 6vw, 64px);
