@@ -1,0 +1,18 @@
+# runtime
+langchain
+langchain-community
+langchain-groq
+sentence-transformers
+faiss-cpu
+pydantic
+python-dotenv
+rank-bm25
+fastapi
+uvicorn[standard]
+
+# index build only (ingest.py / scripts) — not needed to serve the app
+pypdf
+pytesseract  # also needs the tesseract binary: brew install tesseract
+reportlab
+matplotlib
+pillow

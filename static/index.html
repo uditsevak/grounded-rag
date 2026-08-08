@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grounded — RAG document intelligence</title>
+  <meta name="description" content="Ask a question against an indexed document set and audit how the answer was assembled: ranked sources, hybrid retrieval, and a faithfulness reading." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <main class="sheet">
+    <header class="masthead">
+      <div class="wordmark">
+        <span class="wordmark__name">Grounded</span>
+        <span class="wordmark__sub">RAG document intelligence</span>
+      </div>
+      <p class="corpus" aria-label="Indexed corpus">
+        <span class="corpus__dot" aria-hidden="true"></span>
+        6 documents · 21 chunks · dense FAISS + sparse BM25
+      </p>
+    </header>
+
+    <section class="console" aria-label="Ask the index">
+      <p class="thesis">Ask the docs. Audit the answer.</p>
+
+      <form id="ask-form" class="ask" autocomplete="off">
+        <label class="ask__label" for="question">Your question</label>
+        <textarea id="question" class="ask__field" rows="2"
+          placeholder="e.g. What is the uptime SLA for the Business plan?"
+          maxlength="2000" required></textarea>
+
+        <div class="controls">
+          <fieldset class="seg">
+            <legend class="control__label">Retrieval</legend>
+            <div class="seg__track" role="radiogroup" aria-label="Retrieval mode">
+              <input type="radio" name="mode" id="mode-dense" value="dense" />
+              <label for="mode-dense">dense</label>
+              <input type="radio" name="mode" id="mode-hybrid" value="hybrid" checked />
+              <label for="mode-hybrid">hybrid</label>
+              <input type="radio" name="mode" id="mode-sparse" value="sparse" />
+              <label for="mode-sparse">sparse</label>
+            </div>
+          </fieldset>
+
+          <div class="stepper">
+            <span class="control__label" id="k-label">Top-k</span>
+            <div class="stepper__track" role="group" aria-labelledby="k-label">
+              <button type="button" class="stepper__btn" data-step="-1" aria-label="Decrease k">–</button>
+              <output class="stepper__value" id="k-value" for="k-label">4</output>
+              <button type="button" class="stepper__btn" data-step="1" aria-label="Increase k">+</button>
+            </div>
+          </div>
+
+          <div class="dial" id="alpha-control">
+            <label class="control__label" for="alpha">Fusion α <span class="dial__hint">dense weight</span></label>
+            <input type="range" id="alpha" min="0" max="1" step="0.05" value="0.5" />
+            <output class="dial__value" id="alpha-value" for="alpha">0.50</output>
+          </div>
+
+          <button type="submit" class="ask__go" id="ask-go">
+            <span class="ask__go-label">Ask</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="result" id="result" hidden aria-live="polite">
+      <div class="result__grid">
+        <article class="paper" id="paper">
+          <p class="paper__eyebrow">Answer</p>
+          <div class="paper__body" id="answer-body"></div>
+        </article>
+
+        <aside class="reading" aria-label="Answer diagnostics">
+          <p class="reading__eyebrow">Faithfulness</p>
+          <figure class="gauge" id="gauge" role="img" aria-label="Faithfulness gauge">
+            <svg viewBox="0 0 200 118" width="100%">
+              <path class="gauge__arc" d="M18 108 A82 82 0 0 1 182 108" />
+              <g class="gauge__ticks" id="gauge-ticks"></g>
+              <g class="gauge__needle" id="gauge-needle" transform="rotate(-90 100 108)">
+                <line x1="100" y1="108" x2="100" y2="34" />
+                <circle cx="100" cy="108" r="6" />
+              </g>
+            </svg>
+            <figcaption class="gauge__read">
+              <span class="gauge__score" id="gauge-score">–</span><span class="gauge__of">/5</span>
+            </figcaption>
+          </figure>
+          <p class="guardrail" id="guardrail" data-state="idle">
+            <span class="guardrail__key">Guardrail</span>
+            <span class="guardrail__val" id="guardrail-val">—</span>
+          </p>
+          <p class="reading__note" id="reading-note"></p>
+        </aside>
+      </div>
+
+      <div class="provenance">
+        <p class="provenance__eyebrow">
+          Provenance — <span id="source-count">0</span> sources, ranked by <span id="rank-by">fusion</span>
+        </p>
+        <ol class="sources" id="sources"></ol>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
