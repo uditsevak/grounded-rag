@@ -1,13 +1,3 @@
----
-title: Grounded — RAG Document Intelligence
-emoji: 📐
-colorFrom: indigo
-colorTo: yellow
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Grounded — RAG Document Intelligence
 
 Ask a question against an indexed document set and **audit how the answer was
@@ -15,7 +5,8 @@ assembled**: ranked sources, a dense-vs-sparse-vs-hybrid retrieval switch, and a
 faithfulness reading that flags claims not grounded in the retrieved context.
 
 Built on FAISS + BM25 + LangChain, generation and judging on Groq (free tier),
-embeddings local via sentence-transformers. No OpenAI key required.
+embeddings local via fastembed (ONNX — no torch, so it runs on free hosts). No
+OpenAI key required.
 
 > **Live demo:** _<add your Hugging Face Space URL here after the first deploy>_
 
@@ -32,7 +23,9 @@ embeddings local via sentence-transformers. No OpenAI key required.
   vs hybrid; LLM-as-judge faithfulness + answer relevancy; a human-vs-judge
   calibration step. Writes `eval_report.md` / `.json` from a real run.
 - **Faithfulness guardrail** — every answer is scored for groundedness by the
-  judge; answers below threshold are flagged with the unsupported span.
+  judge and flagged when it scores below threshold *or* the judge lists any
+  unsupported claim. If the judge is rate-limited it degrades gracefully — the
+  answer still returns, marked "check unavailable", rather than failing.
 - **Bring your own document** — upload a PDF/TXT/MD and query it live. Each
   upload builds a throwaway in-memory retriever (`uploads.py`); it's never
   merged into the shared demo index and is evicted after a cap, so one visitor
@@ -58,6 +51,10 @@ dense alone already hits perfect recall and mixing in BM25 reshuffles the tail.
 The point of the harness is that it *measures* this so you can tune `alpha` per
 corpus, not that hybrid always wins. Bigger, noisier corpora with exact-keyword
 queries (error codes, API paths) are where BM25 pulls more weight.
+
+(This report was generated with the 70b judge; the deployed demo now defaults to
+the 8b judge to stretch the free-tier token budget — re-run `python eval.py` to
+regenerate with whatever `GROQ_JUDGE_MODEL` you set.)
 
 ## Run it locally
 
@@ -100,5 +97,7 @@ python eval.py --skip-calibration  # metrics only, no prompts
 - Image handling is OCR, not image understanding — reads rendered text, won't
   describe a photo with no text.
 - FAISS is a flat index over ~20 chunks (no IVF/HNSW/sharding).
-- The public demo runs on a single shared Groq key with no per-user rate limit.
-- No retries beyond the judge call, no auth, no monitoring.
+- The public demo runs on one shared free-tier Groq key. Calls go through a
+  small concurrency gate + retry/backoff, and the guardrail degrades gracefully
+  when throttled, but heavy simultaneous traffic will still queue or skip the
+  faithfulness check. No auth, no monitoring.

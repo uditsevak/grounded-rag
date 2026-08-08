@@ -4,32 +4,15 @@ Fixed 0-5 rubric, structured output via a Pydantic schema so scores are
 always parseable. Shared by eval.py (bulk scoring) and guardrail.py
 (per-answer check before returning a response to the user).
 """
-import time
-
 from pydantic import BaseModel, Field
 
-from providers import get_judge_llm
+from providers import get_judge_llm, groq_invoke
 
-# Groq's Llama models sometimes emit tool calls as literal text
-# (`<function=...>{...}</function>`) instead of through the real tool-calling
-# channel, which Groq's server then rejects as tool_use_failed. json_mode
-# sidesteps that path entirely (plain JSON in the message content); the retry
-# is a safety net for the rest of the transient failure modes (rate limits,
-# occasional malformed JSON) any LLM call can hit.
-MAX_ATTEMPTS = 3
-RETRY_DELAY_SECONDS = 2
-
-
-def _invoke_with_retry(llm, prompt):
-    last_error = None
-    for attempt in range(MAX_ATTEMPTS):
-        try:
-            return llm.invoke(prompt)
-        except Exception as e:
-            last_error = e
-            if attempt < MAX_ATTEMPTS - 1:
-                time.sleep(RETRY_DELAY_SECONDS)
-    raise last_error
+# Note on json_mode below: Groq's Llama models sometimes emit tool calls as
+# literal text (`<function=...>{...}</function>`) instead of through the real
+# tool-calling channel, which Groq rejects as tool_use_failed. json_mode
+# sidesteps that path entirely (plain JSON in the message content). groq_invoke
+# adds the shared concurrency gate + retry/backoff.
 
 FAITHFULNESS_RUBRIC = """You are grading whether an ANSWER is faithful to the
 provided CONTEXT (i.e. grounded — every factual claim in the answer is
@@ -75,7 +58,7 @@ def judge_faithfulness(question: str, answer: str, context: str) -> Faithfulness
         "\n\nRespond with a JSON object with keys: score (int 0-5), "
         "unsupported_claims (list of strings), reasoning (string)."
     )
-    return _invoke_with_retry(llm, prompt)
+    return groq_invoke(llm, prompt)
 
 
 def judge_relevancy(question: str, answer: str) -> RelevancyResult:
@@ -84,4 +67,4 @@ def judge_relevancy(question: str, answer: str) -> RelevancyResult:
         f"{RELEVANCY_RUBRIC}\n\nQUESTION:\n{question}\n\nANSWER:\n{answer}"
         "\n\nRespond with a JSON object with keys: score (int 0-5), reasoning (string)."
     )
-    return _invoke_with_retry(llm, prompt)
+    return groq_invoke(llm, prompt)

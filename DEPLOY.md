@@ -1,9 +1,8 @@
 # Deploy runbook
 
-Two targets: **GitHub** (code, for recruiters to browse) and a **Hugging Face
-Space** (the live demo). The repo is already committed on `main`. Every step
-below needs your own login, which is why they're here for you to run rather
-than baked into the build.
+Two targets: **GitHub** (code, for recruiters to browse) and **Render** (the
+free live demo). The repo is already committed on `main`. Each step needs your
+own login, which is why they're here for you to run.
 
 ## A. GitHub
 
@@ -22,44 +21,36 @@ git remote add origin https://github.com/<you>/grounded-rag.git
 git push -u origin main
 ```
 
-## B. Hugging Face Space (live demo)
+## B. Render (free live demo)
 
-1. **Write token** — create one at https://huggingface.co/settings/tokens
-   (role: *Write*). Copy it.
-2. **Create the Space** — https://huggingface.co/new-space
-   - Owner: you · Space name: `grounded-rag`
-   - SDK: **Docker** → *Blank* template
-   - Visibility: **Public**
-3. **Add the secret** — on the new Space: *Settings → Variables and secrets →
-   New secret* → name `GROQ_API_KEY`, value = your Groq key.
-   (The Space reads it from the environment; nothing is committed.)
-4. **Push the code to the Space:**
+Render's free web service needs **no credit card** and deploys straight from
+your GitHub repo. The app no longer uses torch (embeddings run on fastembed),
+so it fits the free 512 MB tier. Requires GitHub (section A) done first.
 
-   ```bash
-   git remote add hf https://huggingface.co/spaces/<you>/grounded-rag
-   git push hf main         # username = your HF name, password = the write token
-   ```
+1. Sign up / log in at https://render.com (use "Sign in with GitHub").
+2. **New → Blueprint** → pick your `grounded-rag` repo. Render reads
+   `render.yaml` and configures a free web service automatically.
+   - (Or **New → Web Service** manually: Runtime *Python*, Build
+     `pip install -r requirements.txt`, Start
+     `uvicorn server:app --host 0.0.0.0 --port $PORT`, Instance *Free*.)
+3. When prompted for env vars, set **`GROQ_API_KEY`** = your Groq key
+   (`render.yaml` marks it `sync: false`, so Render asks for it rather than
+   reading it from git). Click **Apply / Create**.
+4. Render builds (~3–5 min: installs deps, pre-downloads the embedding model)
+   and gives you a URL like `https://grounded-rag.onrender.com`.
+5. **Link it back** — put that URL in the README's `Live demo:` line and
+   `git push origin main`. Render auto-redeploys on every push to `main`.
 
-5. **Watch the build** — the Space page streams build logs. First build is
-   ~10–15 min (it installs torch and pre-bakes the embedding model). When the
-   status flips to **Running**, the demo is live at
-   `https://huggingface.co/spaces/<you>/grounded-rag`.
-6. **Link it back** — put that URL in the README's `Live demo:` line, then
-   `git push origin main` (and `git push hf main`) so the GitHub page links to
-   the live Space.
+## Notes
 
-## Config that's already set for you
-
-- `README.md` has the HF frontmatter (`sdk: docker`, `app_port: 7860`).
-- `Dockerfile` runs `uvicorn server:app` on 7860 and pre-downloads the
-  embedding model so the first request isn't a cold download.
-- The FAISS index + BM25 corpus are committed (44 KB), so the container serves
+- **Free instances sleep after ~15 min idle.** The first hit after a nap takes
+  ~30–50 s to wake, then it's fast. Fine for a demo — worth a line in your
+  README so a recruiter isn't surprised by the first load.
+- The FAISS index + BM25 corpus are committed (~50 KB), so Render serves
   without rebuilding the index.
-
-## Heads-up
-
-- The Space is **public and runs on your Groq key** (you chose to leave it
-  open). It's a free-tier key with rate limits, so worst case is temporary
-  throttling — no billing surprise.
-- If a build ever fails, the Space's build log is the place to look; the same
-  `pip install -r requirements.txt` runs there as locally.
+- The demo runs on **your Groq key** (free tier, rate-limited) — worst case is
+  temporary throttling, no billing surprise.
+- If a build fails, Render's build log runs the same
+  `pip install -r requirements.txt` you can run locally.
+- `Dockerfile` is kept for reference / container hosts (Cloud Run, Fly); Render
+  uses the native Python path above, not Docker.
