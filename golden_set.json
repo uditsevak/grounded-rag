@@ -1,0 +1,134 @@
+[
+  {
+    "id": "q01",
+    "question": "How many versions of a file does Nimbus keep?",
+    "expected_answer": "The last 100 versions, or 30 days of history, whichever is greater.",
+    "expected_doc_ids": ["product_overview"]
+  },
+  {
+    "id": "q02",
+    "question": "How many users can co-edit a Nimbus Doc at the same time before it switches to read-only for others?",
+    "expected_answer": "Up to 50 simultaneous editors.",
+    "expected_doc_ids": ["product_overview"]
+  },
+  {
+    "id": "q03",
+    "question": "Which operating systems does the Nimbus desktop sync client support?",
+    "expected_answer": "macOS, Windows, and Linux.",
+    "expected_doc_ids": ["product_overview"]
+  },
+  {
+    "id": "q04",
+    "question": "How much does Nimbus Team cost per user per month if billed annually?",
+    "expected_answer": "$9 per user/month.",
+    "expected_doc_ids": ["pricing"]
+  },
+  {
+    "id": "q05",
+    "question": "What is the uptime SLA for the Nimbus Business plan?",
+    "expected_answer": "99.9%.",
+    "expected_doc_ids": ["pricing"]
+  },
+  {
+    "id": "q06",
+    "question": "Does Nimbus Enterprise offer financial credits for downtime beyond its SLA?",
+    "expected_answer": "Yes, Enterprise includes financial credits for downtime beyond the 99.95% uptime SLA.",
+    "expected_doc_ids": ["pricing"]
+  },
+  {
+    "id": "q07",
+    "question": "Is a credit card required to start a free trial on Nimbus Team?",
+    "expected_answer": "No, no credit card is required for the Nimbus Team trial.",
+    "expected_doc_ids": ["pricing"]
+  },
+  {
+    "id": "q08",
+    "question": "What encryption algorithm does Nimbus use for data at rest?",
+    "expected_answer": "AES-256.",
+    "expected_doc_ids": ["security_and_compliance"]
+  },
+  {
+    "id": "q09",
+    "question": "Which Nimbus plan supports SCIM-based user provisioning?",
+    "expected_answer": "Enterprise only.",
+    "expected_doc_ids": ["security_and_compliance"]
+  },
+  {
+    "id": "q10",
+    "question": "Does Nimbus support SMS-based two-factor authentication?",
+    "expected_answer": "No, Nimbus only supports TOTP authenticator app based 2FA, not SMS.",
+    "expected_doc_ids": ["security_and_compliance"]
+  },
+  {
+    "id": "q11",
+    "question": "How long after deletion are files permanently purged from Trash?",
+    "expected_answer": "30 days.",
+    "expected_doc_ids": ["security_and_compliance"]
+  },
+  {
+    "id": "q12",
+    "question": "What is the maximum file size for the standard Nimbus upload endpoint?",
+    "expected_answer": "5 GB; larger files require the chunked upload endpoint.",
+    "expected_doc_ids": ["api_reference"]
+  },
+  {
+    "id": "q13",
+    "question": "What error code does the Nimbus API return when the rate limit is exceeded?",
+    "expected_answer": "HTTP 429 with error code ERR_429_RATE_LIMIT.",
+    "expected_doc_ids": ["api_reference"]
+  },
+  {
+    "id": "q14",
+    "question": "What is the Nimbus API rate limit per minute for Team and Business plans?",
+    "expected_answer": "600 requests per minute per token.",
+    "expected_doc_ids": ["api_reference"]
+  },
+  {
+    "id": "q15",
+    "question": "What HTTP status and error code does the Nimbus API return for an invalid auth token?",
+    "expected_answer": "HTTP 401 with error code ERR_401_INVALID_TOKEN.",
+    "expected_doc_ids": ["api_reference"]
+  },
+  {
+    "id": "q16",
+    "question": "How long is a Nimbus Workspace invite link valid before it expires?",
+    "expected_answer": "7 days.",
+    "expected_doc_ids": ["onboarding_guide"]
+  },
+  {
+    "id": "q17",
+    "question": "Can a Business Workspace be created with a personal gmail.com email address?",
+    "expected_answer": "No, Business and Enterprise Workspaces require a verified company domain; personal domains like gmail.com are blocked.",
+    "expected_doc_ids": ["onboarding_guide"]
+  },
+  {
+    "id": "q18",
+    "question": "What are the three member roles available in a Nimbus Workspace?",
+    "expected_answer": "Viewer, Editor, and Admin.",
+    "expected_doc_ids": ["onboarding_guide"]
+  },
+  {
+    "id": "q19",
+    "question": "What typically causes the Nimbus sync client to get stuck on \"Syncing...\"?",
+    "expected_answer": "A file with an unsupported character in its name.",
+    "expected_doc_ids": ["troubleshooting"]
+  },
+  {
+    "id": "q20",
+    "question": "What usually causes an SSO login loop on Nimbus Business or Enterprise plans?",
+    "expected_answer": "Clock skew greater than 5 minutes between the identity provider and Nimbus's SAML validation service.",
+    "expected_doc_ids": ["troubleshooting"]
+  },
+  {
+    "id": "q21",
+    "question": "Can an Enterprise customer migrate their primary data to a different region after their Workspace is created?",
+    "expected_answer": "No, primary data cannot be migrated across regions automatically; a new Workspace must be created in the target region and files copied over manually.",
+    "expected_doc_ids": ["security_and_compliance", "troubleshooting"]
+  },
+  {
+    "id": "q22",
+    "question": "According to the sync architecture diagram, which two regions does the Nimbus sync engine replicate to besides the primary region?",
+    "expected_answer": "eu-west-1 and ap-southeast-1 (primary is us-east-1).",
+    "expected_doc_ids": ["product_overview"]
+  }
+]

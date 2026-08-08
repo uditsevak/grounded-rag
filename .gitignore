@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# faiss_index/ and bm25_corpus.pkl ARE committed on purpose — the deploy loads
+# the prebuilt index instead of rebuilding it (no tesseract/pypdf in the image).
+
+# machine-local Claude Code settings
+.claude/settings.local.json

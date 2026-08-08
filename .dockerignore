@@ -1,0 +1,10 @@
+.git
+.gitignore
+.claude
+__pycache__
+*.pyc
+.env
+venv
+.venv
+eval_report.json
+scripts
