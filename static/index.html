@@ -77,6 +77,43 @@
       </form>
     </section>
 
+    <section class="starter" id="starter" aria-label="About the demo corpus">
+      <details class="about">
+        <summary class="about__summary">What's in the demo corpus?</summary>
+        <div class="about__body">
+          <p>The docs for <strong>Nimbus</strong>, a fictional team file-storage &amp;
+          collaboration product. Six documents:</p>
+          <ul class="about__docs">
+            <li><b>product_overview</b> — versioning, workspaces, co-editing, sync client (with an architecture diagram)</li>
+            <li><b>pricing</b> — Free / Team / Business / Enterprise plans, trials, SLAs</li>
+            <li><b>security_and_compliance</b> — encryption, SSO/SCIM, 2FA, data residency</li>
+            <li><b>api_reference</b> — REST endpoints, rate limits, error codes</li>
+            <li><b>onboarding_guide</b> — signup, invites, member roles</li>
+            <li><b>troubleshooting</b> — sync errors, upload limits, SSO login issues</li>
+          </ul>
+        </div>
+      </details>
+
+      <p class="samples__label">Try one — each exercises a different part of the pipeline:</p>
+      <div class="samples">
+        <button type="button" class="sample" data-q="What is the uptime SLA on the Nimbus Business plan?">
+          What's the uptime SLA on the Business plan?<span class="sample__facet">retrieval</span>
+        </button>
+        <button type="button" class="sample" data-q="Is a credit card required to start a free trial on Nimbus Team?">
+          Is a credit card required for the Team trial?<span class="sample__facet">guardrail flag</span>
+        </button>
+        <button type="button" class="sample" data-q="Which two regions does the Nimbus sync engine replicate to besides the primary region?">
+          Which regions does the sync engine replicate to?<span class="sample__facet">image · OCR</span>
+        </button>
+        <button type="button" class="sample" data-q="What error code does the Nimbus API return when the rate limit is exceeded?">
+          What error code means the rate limit was hit?<span class="sample__facet">keyword · BM25</span>
+        </button>
+        <button type="button" class="sample" data-q="Does Nimbus integrate with Slack?">
+          Does Nimbus integrate with Slack?<span class="sample__facet">out of scope</span>
+        </button>
+      </div>
+    </section>
+
     <section class="result" id="result" hidden aria-live="polite">
       <div class="result__grid">
         <article class="paper" id="paper">
