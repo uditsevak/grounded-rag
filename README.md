@@ -46,18 +46,18 @@ embeddings local via sentence-transformers. No OpenAI key required.
 | mode | hit-rate@k | MRR | precision@k | recall@k |
 |---|---|---|---|---|
 | dense | 1.000 | 0.936 | 0.511 | 1.000 |
-| hybrid | 1.000 | 0.924 | 0.455 | 1.000 |
+| hybrid | 1.000 | 0.947 | 0.455 | 1.000 |
 
-Mean faithfulness 4.77/5, mean relevancy 4.68/5, 1/22 answers guardrail-flagged
+Mean faithfulness 4.86/5, mean relevancy 4.68/5, 1/22 answers guardrail-flagged
 (a genuine caught hallucination — the model hedged into a claim the context
 directly contradicts). Full detail in `eval_report.json`.
 
-Honest reading: on this small, cleanly-separated corpus hybrid does **not** beat
-dense-only at the default weight — dense alone already hits perfect recall, and
-mixing in BM25 occasionally reorders a correct top-1 down a rank. The point of
-the harness is that it *measures* this so you can tune `alpha` per corpus, not
-that hybrid always wins. Bigger, noisier corpora with exact-keyword queries
-(error codes, API paths) are where BM25 pulls its weight.
+Honest reading: on this small, cleanly-separated corpus the two are close —
+hybrid edges dense on MRR (0.947 vs 0.936) but dense wins on precision, since
+dense alone already hits perfect recall and mixing in BM25 reshuffles the tail.
+The point of the harness is that it *measures* this so you can tune `alpha` per
+corpus, not that hybrid always wins. Bigger, noisier corpora with exact-keyword
+queries (error codes, API paths) are where BM25 pulls more weight.
 
 ## Run it locally
 

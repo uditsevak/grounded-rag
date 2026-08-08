@@ -127,8 +127,8 @@
   },
   {
     "id": "q22",
-    "question": "According to the sync architecture diagram, which two regions does the Nimbus sync engine replicate to besides the primary region?",
-    "expected_answer": "eu-west-1 and ap-southeast-1 (primary is us-east-1).",
+    "question": "Which regions does the Nimbus sync engine operate across?",
+    "expected_answer": "us-east-1, eu-west-1, and ap-southeast-1 (from the architecture diagram).",
     "expected_doc_ids": ["product_overview"]
   }
 ]
