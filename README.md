@@ -8,7 +8,8 @@ Built on FAISS + BM25 + LangChain, generation and judging on Groq (free tier),
 embeddings local via fastembed (ONNX — no torch, so it runs on free hosts). No
 OpenAI key required.
 
-> **Live demo:** _<add your Hugging Face Space URL here after the first deploy>_
+> **Live demo:** **https://grounded-rag.onrender.com**
+> _(hosted on Render's free tier — if it's been idle the first load takes ~40s to wake, then it's fast)_
 
 <!-- add a screenshot: save one to docs/screenshot.png and uncomment -->
 <!-- ![Grounded UI](docs/screenshot.png) -->
