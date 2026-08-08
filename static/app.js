@@ -195,20 +195,29 @@ function renderResult(data) {
   answerBody.innerHTML = formatAnswer(data.answer);
 
   const score = data.faithfulness.score;
-  gaugeScore.textContent = score;
-  setNeedle(score);
 
-  if (data.flagged) {
-    guardrail.dataset.state = "flag";
-    guardrailVal.textContent = "flagged";
-    const claims = data.faithfulness.unsupported_claims || [];
-    readingNote.textContent = claims.length
-      ? `Unsupported: ${claims.join("; ")}`
-      : data.faithfulness.reasoning;
+  if (score === null || score === undefined) {
+    // judge unavailable (e.g. free-tier rate limit) — answer still shown
+    gaugeScore.textContent = "–";
+    setNeedle(0);
+    guardrail.dataset.state = "idle";
+    guardrailVal.textContent = "check unavailable";
+    readingNote.textContent = data.faithfulness.reasoning || "";
   } else {
-    guardrail.dataset.state = "ok";
-    guardrailVal.textContent = "grounded";
-    readingNote.textContent = "";
+    gaugeScore.textContent = score;
+    setNeedle(score);
+    if (data.flagged) {
+      guardrail.dataset.state = "flag";
+      guardrailVal.textContent = "flagged";
+      const claims = data.faithfulness.unsupported_claims || [];
+      readingNote.textContent = claims.length
+        ? `Unsupported: ${claims.join("; ")}`
+        : data.faithfulness.reasoning;
+    } else {
+      guardrail.dataset.state = "ok";
+      guardrailVal.textContent = "grounded";
+      readingNote.textContent = "";
+    }
   }
 
   rankBy.textContent = RANK_LABEL[data.mode] || data.mode;

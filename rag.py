@@ -1,6 +1,6 @@
 """End-to-end query pipeline: retrieve -> generate -> guardrail-check."""
 from guardrail import apply_guardrail
-from providers import get_chat_llm
+from providers import get_chat_llm, groq_invoke
 from retrieval import HybridRetriever
 
 PROMPT_TEMPLATE = """Answer the question using only the context below. If the
@@ -24,7 +24,7 @@ def answer(question, retriever: HybridRetriever, mode="hybrid", k=4, alpha=0.5):
     chunks = retriever.retrieve(question, k=k, mode=mode, alpha=alpha)
     context = build_context(chunks)
     llm = get_chat_llm()
-    raw_answer = llm.invoke(PROMPT_TEMPLATE.format(context=context, question=question)).content
+    raw_answer = groq_invoke(llm, PROMPT_TEMPLATE.format(context=context, question=question)).content
 
     guarded = apply_guardrail(question, raw_answer, context)
 
