@@ -19,11 +19,19 @@
         <span class="wordmark__name">Grounded</span>
         <span class="wordmark__sub">RAG document intelligence</span>
       </div>
-      <p class="corpus" aria-label="Indexed corpus">
-        <span class="corpus__dot" aria-hidden="true"></span>
-        6 documents · 21 chunks · dense FAISS + sparse BM25
-      </p>
+      <div class="corpusbar">
+        <p class="corpus" id="corpus-line" aria-label="Indexed corpus">
+          <span class="corpus__dot" id="corpus-dot" aria-hidden="true"></span>
+          <span id="corpus-text">6 documents · 21 chunks · dense FAISS + sparse BM25</span>
+        </p>
+        <div class="corpus__actions">
+          <button type="button" class="linkbtn" id="upload-btn">+ your document</button>
+          <button type="button" class="linkbtn" id="reset-btn" hidden>use demo corpus</button>
+          <input type="file" id="file-input" accept=".pdf,.txt,.md,.markdown" hidden />
+        </div>
+      </div>
     </header>
+    <p class="upload-note" id="upload-note" role="status" hidden></p>
 
     <section class="console" aria-label="Ask the index">
       <p class="thesis">Ask the docs. Audit the answer.</p>

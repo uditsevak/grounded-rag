@@ -33,6 +33,10 @@ embeddings local via sentence-transformers. No OpenAI key required.
   calibration step. Writes `eval_report.md` / `.json` from a real run.
 - **Faithfulness guardrail** — every answer is scored for groundedness by the
   judge; answers below threshold are flagged with the unsupported span.
+- **Bring your own document** — upload a PDF/TXT/MD and query it live. Each
+  upload builds a throwaway in-memory retriever (`uploads.py`); it's never
+  merged into the shared demo index and is evicted after a cap, so one visitor
+  can't pollute another's corpus. Text-only (no OCR on uploads).
 - **PDF + image ingestion** — `ingest.py` extracts PDF text and OCRs embedded
   diagrams (Tesseract) so image content is retrievable too.
 - **Custom FastAPI + vanilla-JS frontend** — no framework, no build step.
@@ -77,8 +81,9 @@ python eval.py --skip-calibration  # metrics only, no prompts
 
 | file | role |
 |---|---|
-| `server.py` | FastAPI app: validated `/api/ask`, serves the frontend |
+| `server.py` | FastAPI app: validated `/api/ask` + `/api/upload`, serves the frontend |
 | `static/` | the frontend (index.html, style.css, app.js) |
+| `uploads.py` | ephemeral per-user corpora for uploaded documents |
 | `retrieval.py` | `HybridRetriever`: dense / sparse / hybrid (RRF) |
 | `rag.py` | retrieve → generate → guardrail-check |
 | `judge.py` | LLM-as-judge faithfulness + relevancy (fixed 0–5 rubric) |

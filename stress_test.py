@@ -54,6 +54,25 @@ if r.status_code == 200:
     check("sources ranked from 1", body["sources"][0]["rank"] == 1)
     check("no raw context leaked in response", "context" not in body)
 
+# --- uploads: bring your own document ---
+check("bad file type -> 400",
+      client.post("/api/upload", files={"file": ("virus.bin", b"\x00\x01", "application/octet-stream")}).status_code == 400)
+check("oversized upload -> 413",
+      client.post("/api/upload", files={"file": ("big.txt", b"x" * (5 * 1024 * 1024 + 1), "text/plain")}).status_code == 413)
+check("ask with bogus corpus_id -> 404",
+      client.post("/api/ask", json={"question": "hi", "corpus_id": "deadbeef"}).status_code == 404)
+
+doc = b"Zephyr is a fictional bicycle brand. The Zephyr X1 has a carbon frame and weighs 8kg. " * 30
+up = client.post("/api/upload", files={"file": ("zephyr.txt", doc, "text/plain")})
+check("txt upload -> 200", up.status_code == 200)
+if up.status_code == 200:
+    cid = up.json()["corpus_id"]
+    check("upload reports chunks", up.json()["chunks"] >= 1)
+    ans = client.post("/api/ask", json={"question": "How much does the Zephyr X1 weigh?", "corpus_id": cid})
+    check("ask against uploaded doc -> 200", ans.status_code == 200)
+    if ans.status_code == 200:
+        check("answer sourced from uploaded doc", ans.json()["sources"][0]["chunk_id"].startswith("zephyr::"))
+
 # --- concurrency: shared retriever must not corrupt under parallel load ---
 def one(_):
     resp = client.post("/api/ask", json={"question": "What encryption does Nimbus use at rest?", "k": 3})
