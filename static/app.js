@@ -23,6 +23,19 @@ const rankBy = document.getElementById("rank-by");
 
 const RANK_LABEL = { hybrid: "fusion", dense: "cosine similarity", sparse: "BM25 score" };
 
+const DEMO_CORPUS_TEXT = "6 documents · 21 chunks · dense FAISS + sparse BM25";
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
+// upload elements
+const corpusbar = document.querySelector(".corpusbar");
+const corpusText = document.getElementById("corpus-text");
+const uploadBtn = document.getElementById("upload-btn");
+const resetBtn = document.getElementById("reset-btn");
+const fileInput = document.getElementById("file-input");
+const uploadNote = document.getElementById("upload-note");
+
+let corpusId = null; // null => shared demo corpus
+
 // --- gauge dial: draw the 0..5 ticks once ---
 (function drawTicks() {
   const ticks = document.getElementById("gauge-ticks");
@@ -62,6 +75,58 @@ document.querySelectorAll(".stepper__btn").forEach((btn) => {
     const next = Number(kValue.textContent) + Number(btn.dataset.step);
     kValue.textContent = Math.min(10, Math.max(1, next));
   });
+});
+
+// --- upload: bring your own document ---
+function setNote(text, tone) {
+  uploadNote.hidden = !text;
+  uploadNote.textContent = text || "";
+  if (tone) uploadNote.dataset.tone = tone;
+  else delete uploadNote.dataset.tone;
+}
+
+function useDemoCorpus() {
+  corpusId = null;
+  corpusbar.dataset.custom = "false";
+  corpusText.textContent = DEMO_CORPUS_TEXT;
+  resetBtn.hidden = true;
+  setNote("", null);
+}
+
+uploadBtn.addEventListener("click", () => fileInput.click());
+resetBtn.addEventListener("click", useDemoCorpus);
+
+fileInput.addEventListener("change", async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  if (file.size > MAX_UPLOAD_BYTES) {
+    setNote("That file is over the 5 MB limit.", "error");
+    fileInput.value = "";
+    return;
+  }
+
+  setNote(`Indexing ${file.name}…`, "busy");
+  uploadBtn.disabled = true;
+
+  const body = new FormData();
+  body.append("file", file);
+  try {
+    const res = await fetch("/api/upload", { method: "POST", body });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail || "Upload failed.");
+
+    corpusId = data.corpus_id;
+    corpusbar.dataset.custom = "true";
+    corpusText.textContent = `${data.filename} · ${data.chunks} chunks · your document`;
+    resetBtn.hidden = false;
+    setNote(`Indexed ${data.filename}. Ask it anything below.`, null);
+  } catch (err) {
+    setNote(err.message || "Upload failed.", "error");
+  } finally {
+    uploadBtn.disabled = false;
+    fileInput.value = "";
+  }
 });
 
 // Enter submits; Shift+Enter for a newline.
@@ -173,6 +238,7 @@ form.addEventListener("submit", async (e) => {
     mode: form.querySelector('input[name="mode"]:checked').value,
     k: Number(kValue.textContent),
     alpha: Number(alphaInput.value),
+    corpus_id: corpusId,
   };
 
   try {
@@ -183,6 +249,7 @@ form.addEventListener("submit", async (e) => {
     });
     if (!res.ok) {
       const detail = await res.json().catch(() => ({}));
+      if (res.status === 404) useDemoCorpus(); // uploaded corpus expired — fall back
       throw new Error(detail.detail || "Something went wrong retrieving the answer.");
     }
     renderResult(await res.json());

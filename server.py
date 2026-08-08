@@ -7,17 +7,20 @@ event loop.
 """
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
 from rag import answer as rag_answer
 from retrieval import HybridRetriever
+from uploads import CorpusStore, extract_chunks
 
 STATIC_DIR = Path(__file__).parent / "static"
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 
 app = FastAPI(title="RAG Document Intelligence")
-retriever = HybridRetriever()
+retriever = HybridRetriever()   # the shared demo corpus
+custom_corpora = CorpusStore()  # ephemeral per-upload retrievers
 
 
 class AskRequest(BaseModel):
@@ -25,6 +28,7 @@ class AskRequest(BaseModel):
     mode: str = Field(default="hybrid", pattern="^(hybrid|dense|sparse)$")
     k: int = Field(default=4, ge=1, le=10)
     alpha: float = Field(default=0.5, ge=0.0, le=1.0)
+    corpus_id: str | None = Field(default=None, max_length=64)
 
     @field_validator("question")
     @classmethod
@@ -35,10 +39,35 @@ class AskRequest(BaseModel):
         return v
 
 
+@app.post("/api/upload")
+async def upload(file: UploadFile = File(...)):
+    # read one byte past the cap so we can tell "exactly at limit" from "over"
+    data = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="File too large — max 5 MB.")
+    try:
+        doc_id, ids, texts, metadatas = extract_chunks(file.filename, data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    try:
+        corpus_id = custom_corpora.add(HybridRetriever.from_corpus(ids, texts, metadatas))
+    except Exception:
+        raise HTTPException(status_code=500, detail="Couldn't index that document.")
+
+    return {"corpus_id": corpus_id, "filename": doc_id, "chunks": len(texts)}
+
+
 @app.post("/api/ask")
 def ask(req: AskRequest):
+    active = retriever
+    if req.corpus_id:
+        active = custom_corpora.get(req.corpus_id)
+        if active is None:
+            raise HTTPException(status_code=404, detail="That uploaded document expired — upload it again.")
+
     try:
-        result = rag_answer(req.question, retriever, mode=req.mode, k=req.k, alpha=req.alpha)
+        result = rag_answer(req.question, active, mode=req.mode, k=req.k, alpha=req.alpha)
     except Exception:
         # don't leak provider stack traces to a public endpoint
         raise HTTPException(status_code=502, detail="The model backend failed. Try again.")

@@ -9,9 +9,10 @@ python-dotenv
 rank-bm25
 fastapi
 uvicorn[standard]
+python-multipart  # multipart form parsing for file uploads
+pypdf             # PDF text extraction (ingest + uploaded docs)
 
 # index build only (ingest.py / scripts) — not needed to serve the app
-pypdf
 pytesseract  # also needs the tesseract binary: brew install tesseract
 reportlab
 matplotlib

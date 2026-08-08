@@ -20,18 +20,31 @@ RRF_K = 60
 
 class HybridRetriever:
     def __init__(self):
-        self.vectorstore = FAISS.load_local(
+        """Load the committed demo index from disk."""
+        vectorstore = FAISS.load_local(
             str(FAISS_DIR), get_embeddings(), allow_dangerous_deserialization=True
         )
         with open(BM25_CORPUS_PATH, "rb") as f:
             corpus = pickle.load(f)
-        self.ids = corpus["ids"]
-        self.texts = corpus["texts"]
-        self.metadatas = corpus["metadatas"]
-        self.bm25 = BM25Okapi([t.lower().split() for t in self.texts])
+        self._build(vectorstore, corpus["ids"], corpus["texts"], corpus["metadatas"])
+
+    @classmethod
+    def from_corpus(cls, ids, texts, metadatas):
+        """Build an in-memory retriever from a freshly chunked document (uploads)."""
+        self = cls.__new__(cls)
+        vectorstore = FAISS.from_texts(texts, get_embeddings(), metadatas=metadatas, ids=ids)
+        self._build(vectorstore, ids, texts, metadatas)
+        return self
+
+    def _build(self, vectorstore, ids, texts, metadatas):
+        self.vectorstore = vectorstore
+        self.ids = ids
+        self.texts = texts
+        self.metadatas = metadatas
+        self.bm25 = BM25Okapi([t.lower().split() for t in texts])
         self.id_to_chunk = {
             cid: {"chunk_id": cid, "text": text, **meta}
-            for cid, text, meta in zip(self.ids, self.texts, self.metadatas)
+            for cid, text, meta in zip(ids, texts, metadatas)
         }
 
     def retrieve_dense(self, query, k=4):
