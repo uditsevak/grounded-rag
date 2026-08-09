@@ -22,10 +22,12 @@ local embeddings), no paid APIs.*
 
 ## What this project demonstrates
 
-- **A full retrieval stack** — **semantic chunking** (split on meaning, not fixed
-  length) → **hybrid retrieval** (dense FAISS ⊕ sparse BM25, fused with reciprocal
-  rank fusion) → an optional **cross-encoder reranker** → optional **LLM query
-  rewriting**. Each stage is toggleable so you can measure its contribution.
+- **A full retrieval stack** — **hybrid retrieval** (dense FAISS ⊕ sparse BM25,
+  fused with reciprocal rank fusion) → an optional **cross-encoder reranker** →
+  optional **LLM query rewriting**. Each stage is toggleable so you can measure
+  its contribution. **Semantic chunking** is also implemented and evaluated
+  (`CHUNK_STRATEGY=semantic`), but recursive chunking is the default — see the
+  note under the eval table for why.
 - **A real evaluation harness**, not vibes — hit-rate@k, MRR, precision/recall
   against a labelled golden set, plus LLM-as-judge scoring for faithfulness and
   answer relevancy, plus a human-vs-judge calibration step. Numbers come from
@@ -43,8 +45,8 @@ local embeddings), no paid APIs.*
 ## How it works
 
 ```
-   ingest → semantic chunk → embed → FAISS (dense) + BM25 (sparse) index
-                                                          │
+   ingest → chunk → embed → FAISS (dense) + BM25 (sparse) index
+                                                    │
   question ─►[optional rewrite]─► hybrid retrieve (RRF) ─►│─► [optional rerank] ─► top-k
                                                                                      │
                               generate answer (grounded prompt) ◄────────────────────┘
@@ -61,23 +63,28 @@ retrieval stage's contribution:
 
 | retrieval        | hit-rate@k | MRR       | precision@k | recall@k |
 |------------------|-----------:|----------:|------------:|---------:|
-| dense only       | 0.955      | 0.864     | 0.511       | 0.955    |
-| + sparse (hybrid)| 1.000      | 0.966     | 0.500       | 1.000    |
-| + reranker       | 1.000      | **1.000** | 0.489       | 1.000    |
+| dense only       | 1.000      | 0.936     | 0.523       | 1.000    |
+| + sparse (hybrid)| 1.000      | 0.947     | 0.466       | 1.000    |
+| + reranker       | 1.000      | **1.000** | **0.534**   | 1.000    |
 
-Generation (hybrid path): mean faithfulness **5.00/5**, mean relevancy **4.59/5**,
-0 answers flagged — every answer was traceable to its sources.
+Generation (hybrid path): mean faithfulness **4.86/5**, mean relevancy **4.68/5**,
+and **1/22** answers guardrail-flagged — a genuine caught hallucination where the
+model hedged into a claim the source contradicts.
 
-**The honest read:** there's a real, measured progression — sparse retrieval lifts
-hit-rate from 0.955 to 1.000 (BM25 catches exact-term matches like error codes
-that dense embeddings miss), and the reranker lifts MRR to a perfect 1.000 (the
-correct chunk lands at rank 1 for every question). Precision dips slightly because
-each question usually has one relevant chunk but `k=4`. The point of the harness
-is that it *measures* each stage so the additions are justified, not cargo-culted.
+**The honest read:** the reranker is the clear win — it lifts MRR to a perfect
+1.000 (the correct chunk lands at rank 1 for *every* question) and edges precision
+up too. Hybrid vs dense is close on this small, cleanly-separated corpus, because
+dense already hits perfect recall; sparse earns its keep on exact-term queries
+(error codes, API paths) that embeddings blur.
 
-*(The guardrail shows 0 flags here because every generated answer was faithful;
-its catch is demonstrable live — the "credit card" sample question makes the
-model hedge into an unsupported claim, and the guardrail flags it.)*
+**On semantic chunking:** I implemented it (embed sentences, split at similarity
+troughs) and evaluated it against recursive chunking — and it *hurt* retrieval
+here. On this short, factual corpus it grouped similar items (e.g. adjacent
+pricing plans) into one chunk, burying specific facts like the Business-plan SLA
+so they fell out of the top-k. Recursive chunking is the default because the
+numbers said so; semantic stays available behind a flag. Measuring it and
+choosing recursive is the point — not adopting a technique because it sounds
+advanced.
 
 ## Engineering decisions worth calling out
 

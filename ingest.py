@@ -24,8 +24,12 @@ BM25_CORPUS_PATH = Path(__file__).parent / "bm25_corpus.pkl"
 
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
-# "semantic" (embed sentences, cut at similarity troughs) or "recursive" (fixed-size)
-CHUNK_STRATEGY = os.environ.get("CHUNK_STRATEGY", "semantic")
+# "recursive" (fixed-size, the default) or "semantic" (embed sentences, cut at
+# similarity troughs). Semantic is implemented and eval'd, but on this short,
+# factual corpus it grouped similar plans together and buried specific facts
+# (e.g. the Business-plan SLA), so recursive retrieves better here. Set
+# CHUNK_STRATEGY=semantic to compare.
+CHUNK_STRATEGY = os.environ.get("CHUNK_STRATEGY", "recursive")
 SEMANTIC_BREAKPOINT_PCTL = 30   # break where consecutive-sentence similarity is this low
 SEMANTIC_MAX_CHARS = 700        # hard cap so a coherent run doesn't grow unbounded
 

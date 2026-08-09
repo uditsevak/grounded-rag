@@ -8,29 +8,29 @@
   },
   "retrieval_metrics": {
     "dense": {
-      "hit_rate@k": 0.9545454545454546,
-      "mrr": 0.8636363636363636,
-      "precision@k": 0.5113636363636364,
-      "recall@k": 0.9545454545454546
+      "hit_rate@k": 1.0,
+      "mrr": 0.9356060606060606,
+      "precision@k": 0.5227272727272727,
+      "recall@k": 1.0
     },
     "hybrid": {
       "hit_rate@k": 1.0,
-      "mrr": 0.9659090909090909,
-      "precision@k": 0.5,
+      "mrr": 0.946969696969697,
+      "precision@k": 0.4659090909090909,
       "recall@k": 1.0
     },
     "hybrid+rerank": {
       "hit_rate@k": 1.0,
       "mrr": 1.0,
-      "precision@k": 0.48863636363636365,
+      "precision@k": 0.5340909090909091,
       "recall@k": 1.0
     }
   },
   "generation_metrics": {
-    "mean_faithfulness": 5,
-    "mean_relevancy": 4.590909090909091,
-    "flagged_count": 0,
-    "flagged_rate": 0.0
+    "mean_faithfulness": 4.863636363636363,
+    "mean_relevancy": 4.681818181818182,
+    "flagged_count": 1,
+    "flagged_rate": 0.045454545454545456
   },
   "calibration": null,
   "generation_detail": [
@@ -39,15 +39,15 @@
       "question": "How many versions of a file does Nimbus keep?",
       "expected_answer": "The last 100 versions, or 30 days of history, whichever is greater.",
       "raw_answer": "Nimbus keeps the last 100 versions of a file, or 30 days of history, whichever is greater.",
-      "context": "[product_overview::1] Every file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater. Older versions are pruned by a nightly cleanup job.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\n\n[onboarding_guide::2] Nimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.",
+      "context": "[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level\n\n[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\n\n[pricing::0] Nimbus Pricing\nNimbus offers four plans, billed monthly or annually.\n**Nimbus Free** \u2014 $0/month. Includes 5 GB of storage, 1 Workspace, and\nreal-time co-editing for up to 3 simultaneous editors. Version history is\nlimited to 7 days.\n**Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target.",
       "sources": [
-        "product_overview::1",
         "product_overview::0",
         "pricing::2",
-        "onboarding_guide::2"
+        "api_reference::0",
+        "pricing::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, specifically [product_overview::1], which states that Nimbus keeps the last 100 versions of a file, or 30 days of history, whichever is greater.",
+      "faithfulness_reasoning": "The answer is directly supported by the context, specifically in the product overview section, which states that 'Nimbus keeps the last 100 versions of a file, or 30 days of history, whichever is greater.'",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly and completely addresses the question by providing a clear and specific policy for how many versions of a file Nimbus keeps.",
@@ -57,19 +57,19 @@
       "id": "q02",
       "question": "How many users can co-edit a Nimbus Doc at the same time before it switches to read-only for others?",
       "expected_answer": "Up to 50 simultaneous editors.",
-      "raw_answer": "Up to 50 users can edit the same document simultaneously before Nimbus switches the document to read-only mode for additional viewers.",
-      "context": "[product_overview::3] Real-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`. All requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.",
+      "raw_answer": "50 users can co-edit a Nimbus Doc at the same time before it switches to read-only for others.",
+      "context": "[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\n\n[troubleshooting::1] the desktop client or the chunked upload API, both of which split the\nfile automatically.\n**Co-editing shows \"switched to read-only\"** \u2014 This happens when a\ndocument exceeds the 50 simultaneous editor limit. Additional users are\ndowngraded to viewers until an active editor's session ends.\n**SSO login loop on Business/Enterprise** \u2014 Usually caused by a clock\nskew greater than 5 minutes between the identity provider and Nimbus's",
       "sources": [
-        "product_overview::3",
+        "product_overview::1",
         "product_overview::0",
         "api_reference::0",
-        "pricing::2"
+        "troubleshooting::1"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, specifically [product_overview::3], which states that up to 50 users can edit the same document simultaneously before Nimbus switches the document to read-only mode for additional viewers.",
+      "faithfulness_reasoning": "The answer directly quotes the context, which states 'Up to 50 users can edit the same document simultaneously before Nimbus switches the document to read-only mode for additional viewers.'",
       "unsupported_claims": [],
       "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question by specifying the exact number of users that can co-edit a Nimbus Doc before it switches to read-only mode.",
+      "relevancy_reasoning": "The answer directly and completely addresses the question by providing a specific number of users that can co-edit a Nimbus Doc before it switches to read-only.",
       "flagged": false
     },
     {
@@ -77,15 +77,15 @@
       "question": "Which operating systems does the Nimbus desktop sync client support?",
       "expected_answer": "macOS, Windows, and Linux.",
       "raw_answer": "The Nimbus desktop sync client is available for macOS, Windows, and Linux.",
-      "context": "[product_overview::4] The desktop sync client is available for macOS, Windows, and Linux. It\nwatches a local folder and mirrors changes to the cloud within roughly 5\nseconds under normal network conditions. Sync Architecture\n\n[onboarding_guide::2] Nimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[product_overview::5] [Image on page 1: Primary: us-east-1 Desktop Sync Nimbus Edge API Replica: Client (Sync Engine v3) eu-west-1 Replica: ap-southeast-1 ~5s propagation to all replica regions]\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.",
+      "context": "[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It\n\n[product_overview::3] [Image on page 1: Primary: us-east-1 Desktop Sync Nimbus Edge API Replica: Client (Sync Engine v3) eu-west-1 Replica: ap-southeast-1 ~5s propagation to all replica regions]\n\n[troubleshooting::2] SAML validation service, which rejects assertions outside that window.\nSyncing the IdP server clock via NTP resolves most cases.\n**Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\nFor issues not covered here, contact support through the in-app chat\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level",
       "sources": [
-        "product_overview::4",
-        "onboarding_guide::2",
-        "product_overview::5",
+        "product_overview::1",
+        "product_overview::3",
+        "troubleshooting::2",
         "product_overview::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, stating that the desktop sync client is available for macOS, Windows, and Linux, which is a claim directly supported by the context.",
+      "faithfulness_reasoning": "The answer directly quotes the context, which states that 'The desktop sync client is available for macOS, Windows, and Linux.'",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly and completely addresses the question by listing the specific operating systems supported by the Nimbus desktop sync client.",
@@ -96,12 +96,12 @@
       "question": "How much does Nimbus Team cost per user per month if billed annually?",
       "expected_answer": "$9 per user/month.",
       "raw_answer": "$9 per user/month (billed annually)",
-      "context": "[pricing::1] **Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target. **Nimbus Business** \u2014 $18 per user/month (billed annually). Includes 5 TB of\npooled storage per user, admin audit logs, single sign-on (SSO) via SAML,\nand a 99.9% uptime SLA.\n\n[pricing::0] Nimbus Pricing\nNimbus offers four plans, billed monthly or annually. **Nimbus Free** \u2014 $0/month. Includes 5 GB of storage, 1 Workspace, and\nreal-time co-editing for up to 3 simultaneous editors. Version history is\nlimited to 7 days.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.",
+      "context": "[pricing::0] Nimbus Pricing\nNimbus offers four plans, billed monthly or annually.\n**Nimbus Free** \u2014 $0/month. Includes 5 GB of storage, 1 Workspace, and\nreal-time co-editing for up to 3 simultaneous editors. Version history is\nlimited to 7 days.\n**Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target.\n\n[pricing::1] **Nimbus Business** \u2014 $18 per user/month (billed annually). Includes 5 TB of\npooled storage per user, admin audit logs, single sign-on (SSO) via SAML,\nand a 99.9% uptime SLA.\n**Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA.\nAnnual plans can be upgraded at any time with a prorated charge for the\n\n[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level",
       "sources": [
-        "pricing::1",
         "pricing::0",
+        "pricing::1",
         "pricing::2",
-        "pricing::3"
+        "product_overview::0"
       ],
       "faithfulness_score": 5,
       "faithfulness_reasoning": "The answer directly quotes the context, which states that Nimbus Team costs $9 per user/month when billed annually.",
@@ -114,19 +114,19 @@
       "id": "q05",
       "question": "What is the uptime SLA for the Nimbus Business plan?",
       "expected_answer": "99.9%.",
-      "raw_answer": "I don't know. The uptime SLA is mentioned in the context, but it only specifies the uptime SLA for the Nimbus Enterprise plan, which is 99.95% with financial credits for downtime beyond the SLA. The uptime SLA for the Nimbus Business plan is not mentioned.",
-      "context": "[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[product_overview::2] Nimbus organizes content into Workspaces. A Workspace is the top-level\ncontainer for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.",
+      "raw_answer": "99.9% uptime SLA.",
+      "context": "[pricing::1] **Nimbus Business** \u2014 $18 per user/month (billed annually). Includes 5 TB of\npooled storage per user, admin audit logs, single sign-on (SSO) via SAML,\nand a 99.9% uptime SLA.\n**Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA.\nAnnual plans can be upgraded at any time with a prorated charge for the\n\n[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level",
       "sources": [
+        "pricing::1",
         "pricing::2",
-        "security_and_compliance::1",
-        "pricing::3",
-        "product_overview::2"
+        "onboarding_guide::0",
+        "product_overview::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer states that it does not know the uptime SLA for the Nimbus Business plan because it is not mentioned in the context, which is a direct and accurate reflection of the provided information.",
+      "faithfulness_reasoning": "The answer directly quotes the uptime SLA for the Nimbus Business plan as stated in the context, with no invention or unsupported extrapolation.",
       "unsupported_claims": [],
-      "relevancy_score": 1,
-      "relevancy_reasoning": "The answer barely addresses the question by mentioning that the uptime SLA for the Nimbus Business plan is not mentioned, but it does not provide the requested information and instead discusses the uptime SLA for a different plan.",
+      "relevancy_score": 5,
+      "relevancy_reasoning": "The answer directly states the uptime SLA for the Nimbus Business plan, fully addressing the question with no omissions.",
       "flagged": false
     },
     {
@@ -134,56 +134,58 @@
       "question": "Does Nimbus Enterprise offer financial credits for downtime beyond its SLA?",
       "expected_answer": "Yes, Enterprise includes financial credits for downtime beyond the 99.95% uptime SLA.",
       "raw_answer": "Yes.",
-      "context": "[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[security_and_compliance::2] Two-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.",
+      "context": "[pricing::1] **Nimbus Business** \u2014 $18 per user/month (billed annually). Includes 5 TB of\npooled storage per user, admin audit logs, single sign-on (SSO) via SAML,\nand a 99.9% uptime SLA.\n**Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA.\nAnnual plans can be upgraded at any time with a prorated charge for the\n\n[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[security_and_compliance::1] Nimbus accounts.\nNimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal.\nEnterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\nNimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts.",
       "sources": [
+        "pricing::1",
         "pricing::2",
-        "pricing::3",
         "security_and_compliance::1",
-        "security_and_compliance::2"
+        "security_and_compliance::0"
       ],
       "faithfulness_score": 5,
       "faithfulness_reasoning": "The answer is directly supported by the context, which states that Nimbus Enterprise includes 'a 99.95% uptime SLA with financial credits for downtime beyond the SLA'.",
       "unsupported_claims": [],
       "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question, providing a clear and concise response regarding whether Nimbus Enterprise offers financial credits for downtime beyond its SLA.",
+      "relevancy_reasoning": "The answer directly addresses the question, providing a clear and concise response regarding Nimbus Enterprise's policy on offering financial credits for downtime beyond its SLA.",
       "flagged": false
     },
     {
       "id": "q07",
       "question": "Is a credit card required to start a free trial on Nimbus Team?",
       "expected_answer": "No, no credit card is required for the Nimbus Team trial.",
-      "raw_answer": "No, a credit card is not required to start a trial on Nimbus Team.",
-      "context": "[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\n\n[product_overview::2] Nimbus organizes content into Workspaces. A Workspace is the top-level\ncontainer for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.",
+      "raw_answer": "Yes, a credit card is required to start a trial on Nimbus Business and Enterprise, but the context does not explicitly state whether a credit card is required for Nimbus Team. However, since Nimbus Business and Enterprise trials require a sales contact, and Nimbus Team is a paid plan, it can be inferred that a credit card might be required for Nimbus Team as well. However, the context does not explicitly confirm this.",
+      "context": "[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\n\n[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It\n\n[pricing::0] Nimbus Pricing\nNimbus offers four plans, billed monthly or annually.\n**Nimbus Free** \u2014 $0/month. Includes 5 GB of storage, 1 Workspace, and\nreal-time co-editing for up to 3 simultaneous editors. Version history is\nlimited to 7 days.\n**Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target.",
       "sources": [
-        "pricing::3",
+        "pricing::2",
         "onboarding_guide::0",
-        "product_overview::2",
-        "pricing::2"
+        "product_overview::1",
+        "pricing::0"
       ],
-      "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, which states 'No credit card is required to start a trial on Nimbus Team'. This claim is directly supported by the provided context.",
-      "unsupported_claims": [],
-      "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question by stating that a credit card is not required to start a trial on Nimbus Team, providing a complete and straightforward response.",
-      "flagged": false
+      "faithfulness_score": 2,
+      "faithfulness_reasoning": "The answer makes an unsupported claim about Nimbus Team requiring a credit card, which is not supported by the context. The context actually states that 'No credit card is required to start a trial on Nimbus Team'.",
+      "unsupported_claims": [
+        "it can be inferred that a credit card might be required for Nimbus Team as well"
+      ],
+      "relevancy_score": 3,
+      "relevancy_reasoning": "The answer partially addresses the question by providing information about Nimbus Business and Enterprise, and making an inference about Nimbus Team, but it does not directly and completely answer the question due to the lack of explicit confirmation.",
+      "flagged": true
     },
     {
       "id": "q08",
       "question": "What encryption algorithm does Nimbus use for data at rest?",
       "expected_answer": "AES-256.",
       "raw_answer": "AES-256.",
-      "context": "[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.",
+      "context": "[security_and_compliance::1] Nimbus accounts.\nNimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal.\nEnterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\nNimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts.\n\n[troubleshooting::2] SAML validation service, which rejects assertions outside that window.\nSyncing the IdP server clock via NTP resolves most cases.\n**Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\nFor issues not covered here, contact support through the in-app chat\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger",
       "sources": [
-        "security_and_compliance::0",
-        "pricing::2",
         "security_and_compliance::1",
-        "product_overview::0"
+        "security_and_compliance::0",
+        "troubleshooting::2",
+        "api_reference::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly states the encryption algorithm used by Nimbus for data at rest, which is explicitly mentioned in the context as AES-256.",
+      "faithfulness_reasoning": "The answer 'AES-256' is directly supported by the context in the section [security_and_compliance::0] where it states 'Nimbus encrypts all files at rest using AES-256'.",
       "unsupported_claims": [],
       "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question by specifying the encryption algorithm used by Nimbus for data at rest, providing a complete and straightforward response.",
+      "relevancy_reasoning": "The answer directly states the encryption algorithm used by Nimbus for data at rest, fully addressing the question.",
       "flagged": false
     },
     {
@@ -191,12 +193,12 @@
       "question": "Which Nimbus plan supports SCIM-based user provisioning?",
       "expected_answer": "Enterprise only.",
       "raw_answer": "Enterprise.",
-      "context": "[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\n\n[product_overview::2] Nimbus organizes content into Workspaces. A Workspace is the top-level\ncontainer for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.",
+      "context": "[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\nNimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\n\n[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It\n\n[onboarding_guide::1] Workspace Settings > Members.\nNew members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\nNimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.",
       "sources": [
-        "security_and_compliance::1",
+        "security_and_compliance::0",
         "onboarding_guide::0",
-        "product_overview::2",
-        "pricing::3"
+        "product_overview::1",
+        "onboarding_guide::1"
       ],
       "faithfulness_score": 5,
       "faithfulness_reasoning": "The answer 'Enterprise' is directly supported by the context, which states that 'SCIM-based user provisioning is available on Enterprise only'.",
@@ -210,12 +212,12 @@
       "question": "Does Nimbus support SMS-based two-factor authentication?",
       "expected_answer": "No, Nimbus only supports TOTP authenticator app based 2FA, not SMS.",
       "raw_answer": "No.",
-      "context": "[security_and_compliance::2] Two-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.",
+      "context": "[security_and_compliance::2] and files copied over manually.\nTwo-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.\nDeleted files are moved to a Trash folder and permanently purged after 30\ndays. Workspace admins can restore a file from Trash at any point before\nthe 30-day purge.\n\n[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\nNimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts.\n\n[troubleshooting::2] SAML validation service, which rejects assertions outside that window.\nSyncing the IdP server clock via NTP resolves most cases.\n**Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\nFor issues not covered here, contact support through the in-app chat\n\n[pricing::0] Nimbus Pricing\nNimbus offers four plans, billed monthly or annually.\n**Nimbus Free** \u2014 $0/month. Includes 5 GB of storage, 1 Workspace, and\nreal-time co-editing for up to 3 simultaneous editors. Version history is\nlimited to 7 days.\n**Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target.",
       "sources": [
         "security_and_compliance::2",
-        "security_and_compliance::1",
         "security_and_compliance::0",
-        "pricing::2"
+        "troubleshooting::2",
+        "pricing::0"
       ],
       "faithfulness_score": 5,
       "faithfulness_reasoning": "The answer is directly supported by the context, which explicitly states 'Nimbus does not support SMS-based 2FA.'",
@@ -229,15 +231,15 @@
       "question": "How long after deletion are files permanently purged from Trash?",
       "expected_answer": "30 days.",
       "raw_answer": "30 days.",
-      "context": "[security_and_compliance::3] Deleted files are moved to a Trash folder and permanently purged after 30\ndays. Workspace admins can restore a file from Trash at any point before\nthe 30-day purge.\n\n[onboarding_guide::2] Nimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[api_reference::1] Upload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\nfiles must use the chunked upload endpoint at `/v1/files/upload/chunked`. List files\n`GET /v1/files?folder_id={id}&page;={n}`\nReturns up to 100 files per page. The response includes a `next_page`\ncursor when more results are available.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.",
+      "context": "[security_and_compliance::2] and files copied over manually.\nTwo-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.\nDeleted files are moved to a Trash folder and permanently purged after 30\ndays. Workspace admins can restore a file from Trash at any point before\nthe 30-day purge.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level\n\n[onboarding_guide::1] Workspace Settings > Members.\nNew members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\nNimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[api_reference::1] files must use the chunked upload endpoint at `/v1/files/upload/chunked`.\nList files\n`GET /v1/files?folder_id={id}&page;={n}`\nReturns up to 100 files per page. The response includes a `next_page`\ncursor when more results are available.\nRate limits\nThe API enforces a rate limit of 600 requests per minute per token on\nTeam and Business plans, and 2000 requests per minute on Enterprise.\nExceeding the limit returns HTTP 429 with error code `ERR_429_RATE_LIMIT`\nand a `Retry-After` header in seconds.",
       "sources": [
-        "security_and_compliance::3",
-        "onboarding_guide::2",
-        "api_reference::1",
-        "product_overview::0"
+        "security_and_compliance::2",
+        "product_overview::0",
+        "onboarding_guide::1",
+        "api_reference::1"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer '30 days' is directly supported by the context in [security_and_compliance::3], which states that 'Deleted files are moved to a Trash folder and permanently purged after 30 days.'",
+      "faithfulness_reasoning": "The answer '30 days' is directly supported by the context, which states 'Deleted files are moved to a Trash folder and permanently purged after 30 days.'",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly addresses the question by providing a specific time frame after which files are permanently purged from Trash.",
@@ -248,15 +250,15 @@
       "question": "What is the maximum file size for the standard Nimbus upload endpoint?",
       "expected_answer": "5 GB; larger files require the chunked upload endpoint.",
       "raw_answer": "5 GB.",
-      "context": "[api_reference::1] Upload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\nfiles must use the chunked upload endpoint at `/v1/files/upload/chunked`. List files\n`GET /v1/files?folder_id={id}&page;={n}`\nReturns up to 100 files per page. The response includes a `next_page`\ncursor when more results are available.\n\n[troubleshooting::1] \"\n< > |`). Check the sync log at `~/.nimbus/sync.log` (macOS/Linux) or\n`%APPDATA%\\Nimbus\\sync.log` (Windows) for a line containing\n`SKIPPED_INVALID_NAME`. **Uploads failing with ERR_413_TOO_LARGE** \u2014 The standard upload endpoint\nrejects files over 5 GB. Files larger than 5 GB must be uploaded through\nthe desktop client or the chunked upload API, both of which split the\nfile automatically. **Co-editing shows \"switched to read-only\"** \u2014 This happens when a\ndocument exceeds the 50 simultaneous editor limit. Additional users are\ndowngraded to viewers until an active editor's session ends. **SSO login loop on Business/Enterprise** \u2014 Usually caused by a clock\nskew greater than 5 minutes between the identity provider and Nimbus's\nSAML validation service, which rejects assertions outside that window.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\n\n[product_overview::1] Every file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater. Older versions are pruned by a nightly cleanup job.",
+      "context": "[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level\n\n[troubleshooting::0] Troubleshooting\n**Sync client stuck on \"Syncing...\"** \u2014 This is usually caused by a file\nwith an unsupported character in its name (Nimbus disallows `\\ / : * ? \"\n< > |`). Check the sync log at `~/.nimbus/sync.log` (macOS/Linux) or\n`%APPDATA%\\Nimbus\\sync.log` (Windows) for a line containing\n`SKIPPED_INVALID_NAME`.\n**Uploads failing with ERR_413_TOO_LARGE** \u2014 The standard upload endpoint\nrejects files over 5 GB. Files larger than 5 GB must be uploaded through\n\n[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It",
       "sources": [
-        "api_reference::1",
-        "troubleshooting::1",
+        "api_reference::0",
         "product_overview::0",
+        "troubleshooting::0",
         "product_overview::1"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer '5 GB' is directly supported by the context, which states 'Maximum upload size via this endpoint is 5 GB' in the api_reference and 'The standard upload endpoint rejects files over 5 GB' in the troubleshooting section.",
+      "faithfulness_reasoning": "The answer '5 GB' is directly supported by the context, specifically in the [api_reference::0] and [troubleshooting::0] sections, which state that the maximum upload size via the standard endpoint is 5 GB.",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly addresses the question by providing a specific file size, implying it is the maximum allowed for the standard Nimbus upload endpoint.",
@@ -267,15 +269,15 @@
       "question": "What error code does the Nimbus API return when the rate limit is exceeded?",
       "expected_answer": "HTTP 429 with error code ERR_429_RATE_LIMIT.",
       "raw_answer": "ERR_429_RATE_LIMIT",
-      "context": "[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`. All requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\n\n[api_reference::2] Rate limits\nThe API enforces a rate limit of 600 requests per minute per token on\nTeam and Business plans, and 2000 requests per minute on Enterprise. Exceeding the limit returns HTTP 429 with error code `ERR_429_RATE_LIMIT`\nand a `Retry-After` header in seconds. Errors\nAuthentication failures return HTTP 401 with error code\n`ERR_401_INVALID_TOKEN`. Requests to a folder the token cannot access\nreturn HTTP 403 with error code `ERR_403_FORBIDDEN`. Malformed request\nbodies return HTTP 400 with error code `ERR_400_BAD_REQUEST`.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\n\n[troubleshooting::2] Syncing the IdP server clock via NTP resolves most cases. **Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.",
+      "context": "[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\n\n[api_reference::1] files must use the chunked upload endpoint at `/v1/files/upload/chunked`.\nList files\n`GET /v1/files?folder_id={id}&page;={n}`\nReturns up to 100 files per page. The response includes a `next_page`\ncursor when more results are available.\nRate limits\nThe API enforces a rate limit of 600 requests per minute per token on\nTeam and Business plans, and 2000 requests per minute on Enterprise.\nExceeding the limit returns HTTP 429 with error code `ERR_429_RATE_LIMIT`\nand a `Retry-After` header in seconds.\n\n[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[api_reference::2] and a `Retry-After` header in seconds.\nErrors\nAuthentication failures return HTTP 401 with error code\n`ERR_401_INVALID_TOKEN`. Requests to a folder the token cannot access\nreturn HTTP 403 with error code `ERR_403_FORBIDDEN`. Malformed request\nbodies return HTTP 400 with error code `ERR_400_BAD_REQUEST`.\nWebhooks can be registered at `/v1/webhooks` and will POST a JSON payload",
       "sources": [
         "api_reference::0",
-        "api_reference::2",
+        "api_reference::1",
         "pricing::2",
-        "troubleshooting::2"
+        "api_reference::2"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the error code from the context, specifically from the section on rate limits, which states that exceeding the limit returns HTTP 429 with error code `ERR_429_RATE_LIMIT`.",
+      "faithfulness_reasoning": "The answer directly matches the error code specified in the context for when the rate limit is exceeded, which is 'ERR_429_RATE_LIMIT'.",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly provides the specific error code (ERR_429_RATE_LIMIT) that the Nimbus API returns when the rate limit is exceeded, fully addressing the question.",
@@ -285,19 +287,19 @@
       "id": "q14",
       "question": "What is the Nimbus API rate limit per minute for Team and Business plans?",
       "expected_answer": "600 requests per minute per token.",
-      "raw_answer": "600 requests per minute per token.",
-      "context": "[api_reference::2] Rate limits\nThe API enforces a rate limit of 600 requests per minute per token on\nTeam and Business plans, and 2000 requests per minute on Enterprise. Exceeding the limit returns HTTP 429 with error code `ERR_429_RATE_LIMIT`\nand a `Retry-After` header in seconds. Errors\nAuthentication failures return HTTP 401 with error code\n`ERR_401_INVALID_TOKEN`. Requests to a folder the token cannot access\nreturn HTTP 403 with error code `ERR_403_FORBIDDEN`. Malformed request\nbodies return HTTP 400 with error code `ERR_400_BAD_REQUEST`.\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`. All requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[pricing::1] **Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target. **Nimbus Business** \u2014 $18 per user/month (billed annually). Includes 5 TB of\npooled storage per user, admin audit logs, single sign-on (SSO) via SAML,\nand a 99.9% uptime SLA.",
+      "raw_answer": "I don't know.",
+      "context": "[pricing::0] Nimbus Pricing\nNimbus offers four plans, billed monthly or annually.\n**Nimbus Free** \u2014 $0/month. Includes 5 GB of storage, 1 Workspace, and\nreal-time co-editing for up to 3 simultaneous editors. Version history is\nlimited to 7 days.\n**Nimbus Team** \u2014 $9 per user/month (billed annually) or $12 per user/month\n(billed monthly). Includes 1 TB of pooled storage per user, unlimited\nWorkspaces, and priority email support with a 24-hour response target.\n\n[troubleshooting::3] widget; Team plan and above receive a response within 24 hours per the\nplan's SLA.\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\n\n[pricing::2] remainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.\nAll paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.",
       "sources": [
-        "api_reference::2",
+        "pricing::0",
+        "troubleshooting::3",
         "api_reference::0",
-        "pricing::3",
-        "pricing::1"
+        "pricing::2"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the rate limit specified in the context for Team and Business plans, with no invention or unsupported extrapolation.",
+      "faithfulness_reasoning": "The answer 'I don't know' does not make any claims, therefore it does not make any unsupported claims and is considered faithful to the provided context.",
       "unsupported_claims": [],
-      "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly states the Nimbus API rate limit per minute, which completely addresses the question.",
+      "relevancy_score": 0,
+      "relevancy_reasoning": "The answer does not provide any information about the Nimbus API rate limit per minute for Team and Business plans, and instead states a lack of knowledge.",
       "flagged": false
     },
     {
@@ -305,15 +307,15 @@
       "question": "What HTTP status and error code does the Nimbus API return for an invalid auth token?",
       "expected_answer": "HTTP 401 with error code ERR_401_INVALID_TOKEN.",
       "raw_answer": "HTTP 401 with error code `ERR_401_INVALID_TOKEN`.",
-      "context": "[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`. All requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\n\n[api_reference::2] Rate limits\nThe API enforces a rate limit of 600 requests per minute per token on\nTeam and Business plans, and 2000 requests per minute on Enterprise. Exceeding the limit returns HTTP 429 with error code `ERR_429_RATE_LIMIT`\nand a `Retry-After` header in seconds. Errors\nAuthentication failures return HTTP 401 with error code\n`ERR_401_INVALID_TOKEN`. Requests to a folder the token cannot access\nreturn HTTP 403 with error code `ERR_403_FORBIDDEN`. Malformed request\nbodies return HTTP 400 with error code `ERR_400_BAD_REQUEST`.\n\n[security_and_compliance::2] Two-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.",
+      "context": "[api_reference::2] and a `Retry-After` header in seconds.\nErrors\nAuthentication failures return HTTP 401 with error code\n`ERR_401_INVALID_TOKEN`. Requests to a folder the token cannot access\nreturn HTTP 403 with error code `ERR_403_FORBIDDEN`. Malformed request\nbodies return HTTP 400 with error code `ERR_400_BAD_REQUEST`.\nWebhooks can be registered at `/v1/webhooks` and will POST a JSON payload\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`.\nAll requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\nUpload a file\n`POST /v1/files/upload`\nAccepts a multipart/form-data body with a `file` field and an optional\n`folder_id` field. Maximum upload size via this endpoint is 5 GB; larger\n\n[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\nNimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts.\n\n[troubleshooting::2] SAML validation service, which rejects assertions outside that window.\nSyncing the IdP server clock via NTP resolves most cases.\n**Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\nFor issues not covered here, contact support through the in-app chat",
       "sources": [
-        "api_reference::0",
         "api_reference::2",
-        "security_and_compliance::2",
-        "security_and_compliance::1"
+        "api_reference::0",
+        "security_and_compliance::0",
+        "troubleshooting::2"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, which explicitly states that authentication failures return HTTP 401 with error code `ERR_401_INVALID_TOKEN`.",
+      "faithfulness_reasoning": "The answer directly quotes the context, which states that authentication failures return HTTP 401 with error code `ERR_401_INVALID_TOKEN`.",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly and completely addresses the question by providing the specific HTTP status and error code returned by the Nimbus API for an invalid auth token.",
@@ -324,15 +326,15 @@
       "question": "How long is a Nimbus Workspace invite link valid before it expires?",
       "expected_answer": "7 days.",
       "raw_answer": "7 days.",
-      "context": "[onboarding_guide::1] After signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\nWorkspace Settings > Members. New members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\n\n[product_overview::2] Nimbus organizes content into Workspaces. A Workspace is the top-level\ncontainer for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\n\n[product_overview::1] Every file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater. Older versions are pruned by a nightly cleanup job.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.",
+      "context": "[onboarding_guide::1] Workspace Settings > Members.\nNew members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\nNimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[security_and_compliance::2] and files copied over manually.\nTwo-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.\nDeleted files are moved to a Trash folder and permanently purged after 30\ndays. Workspace admins can restore a file from Trash at any point before\nthe 30-day purge.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from",
       "sources": [
         "onboarding_guide::1",
-        "product_overview::2",
-        "product_overview::1",
+        "security_and_compliance::2",
+        "product_overview::0",
         "onboarding_guide::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer '7 days' is directly supported by the context in [onboarding_guide::1], which states that 'New members invited by email receive a link valid for 7 days.'",
+      "faithfulness_reasoning": "The answer '7 days' is directly supported by the context, which states that 'New members invited by email receive a link valid for 7 days.'",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly addresses the question by providing a specific time frame for the validity of a Nimbus Workspace invite link.",
@@ -342,19 +344,19 @@
       "id": "q17",
       "question": "Can a Business Workspace be created with a personal gmail.com email address?",
       "expected_answer": "No, Business and Enterprise Workspaces require a verified company domain; personal domains like gmail.com are blocked.",
-      "raw_answer": "No, a Business Workspace cannot be created with a personal email address such as gmail.com. According to the onboarding guide, personal email domains are blocked when creating a Business or Enterprise Workspace, which require a verified company domain.",
-      "context": "[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[onboarding_guide::1] After signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\nWorkspace Settings > Members. New members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.",
+      "raw_answer": "No, a Business Workspace cannot be created with a personal email address such as gmail.com. According to the context, personal email domains are blocked when creating a Business or Enterprise Workspace, which require a verified company domain.",
+      "context": "[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\n\n[onboarding_guide::1] Workspace Settings > Members.\nNew members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\nNimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[security_and_compliance::1] Nimbus accounts.\nNimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal.\nEnterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[security_and_compliance::2] and files copied over manually.\nTwo-factor authentication (2FA) is available on every plan via TOTP\nauthenticator apps. Nimbus does not support SMS-based 2FA. Admins on\nBusiness and Enterprise plans can enforce mandatory 2FA for all Workspace\nmembers from the Security settings page.\nDeleted files are moved to a Trash folder and permanently purged after 30\ndays. Workspace admins can restore a file from Trash at any point before\nthe 30-day purge.",
       "sources": [
         "onboarding_guide::0",
-        "security_and_compliance::1",
         "onboarding_guide::1",
-        "pricing::3"
+        "security_and_compliance::1",
+        "security_and_compliance::2"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes and accurately represents the information provided in the context, specifically from the onboarding guide, stating that personal email domains like gmail.com are blocked for Business or Enterprise Workspaces, which require a verified company domain.",
+      "faithfulness_reasoning": "The answer directly quotes and supports its claim from the provided context, stating that personal email domains such as gmail.com are blocked when creating a Business or Enterprise Workspace.",
       "unsupported_claims": [],
       "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question, stating that a Business Workspace cannot be created with a personal gmail.com email address and provides a clear reason for this restriction.",
+      "relevancy_reasoning": "The answer directly addresses the question by stating that a Business Workspace cannot be created with a personal gmail.com email address and provides a clear reason for this restriction.",
       "flagged": false
     },
     {
@@ -362,15 +364,15 @@
       "question": "What are the three member roles available in a Nimbus Workspace?",
       "expected_answer": "Viewer, Editor, and Admin.",
       "raw_answer": "Viewer, Editor, and Admin.",
-      "context": "[onboarding_guide::3] Admins can assign one of three roles to each member: Viewer (read-only),\nEditor (can upload and edit), and Admin (can manage members, billing, and\nsecurity settings). A Workspace must always have at least one Admin.\n\n[api_reference::0] Nimbus API Reference (excerpt)\nThe Nimbus REST API is available at `https://api.nimbus.example.com/v1`. All requests require an `Authorization: Bearer ` header. Tokens are\nissued from the Workspace's Developer Settings page and can be scoped to\nread-only or read-write access.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.",
+      "context": "[onboarding_guide::2] Admins can assign one of three roles to each member: Viewer (read-only),\nEditor (can upload and edit), and Admin (can manage members, billing, and\nsecurity settings). A Workspace must always have at least one Admin.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\n\n[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level",
       "sources": [
-        "onboarding_guide::3",
-        "api_reference::0",
-        "security_and_compliance::1",
-        "onboarding_guide::0"
+        "onboarding_guide::2",
+        "onboarding_guide::0",
+        "product_overview::1",
+        "product_overview::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly matches the information provided in the context, specifically in [onboarding_guide::3], which lists the three member roles as Viewer, Editor, and Admin.",
+      "faithfulness_reasoning": "The answer directly matches the information provided in the context, specifically in [onboarding_guide::2], which lists the three member roles as Viewer, Editor, and Admin.",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly and completely addresses the question by listing the three member roles available in a Nimbus Workspace.",
@@ -380,57 +382,57 @@
       "id": "q19",
       "question": "What typically causes the Nimbus sync client to get stuck on \"Syncing...\"?",
       "expected_answer": "A file with an unsupported character in its name.",
-      "raw_answer": "A file with an unsupported character in its name, specifically one of the following characters: `\\ / : * ? < > | `).",
-      "context": "[troubleshooting::0] Troubleshooting\n**Sync client stuck on \"Syncing...\"** \u2014 This is usually caused by a file\nwith an unsupported character in its name (Nimbus disallows `\\ / : * ?\n\n[product_overview::5] [Image on page 1: Primary: us-east-1 Desktop Sync Nimbus Edge API Replica: Client (Sync Engine v3) eu-west-1 Replica: ap-southeast-1 ~5s propagation to all replica regions]\n\n[troubleshooting::1] \"\n< > |`). Check the sync log at `~/.nimbus/sync.log` (macOS/Linux) or\n`%APPDATA%\\Nimbus\\sync.log` (Windows) for a line containing\n`SKIPPED_INVALID_NAME`. **Uploads failing with ERR_413_TOO_LARGE** \u2014 The standard upload endpoint\nrejects files over 5 GB. Files larger than 5 GB must be uploaded through\nthe desktop client or the chunked upload API, both of which split the\nfile automatically. **Co-editing shows \"switched to read-only\"** \u2014 This happens when a\ndocument exceeds the 50 simultaneous editor limit. Additional users are\ndowngraded to viewers until an active editor's session ends. **SSO login loop on Business/Enterprise** \u2014 Usually caused by a clock\nskew greater than 5 minutes between the identity provider and Nimbus's\nSAML validation service, which rejects assertions outside that window.\n\n[onboarding_guide::2] Nimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.",
+      "raw_answer": "A file with an unsupported character in its name, specifically one of the following: `\\ / : * ? \" < > |`.",
+      "context": "[troubleshooting::0] Troubleshooting\n**Sync client stuck on \"Syncing...\"** \u2014 This is usually caused by a file\nwith an unsupported character in its name (Nimbus disallows `\\ / : * ? \"\n< > |`). Check the sync log at `~/.nimbus/sync.log` (macOS/Linux) or\n`%APPDATA%\\Nimbus\\sync.log` (Windows) for a line containing\n`SKIPPED_INVALID_NAME`.\n**Uploads failing with ERR_413_TOO_LARGE** \u2014 The standard upload endpoint\nrejects files over 5 GB. Files larger than 5 GB must be uploaded through\n\n[product_overview::3] [Image on page 1: Primary: us-east-1 Desktop Sync Nimbus Edge API Replica: Client (Sync Engine v3) eu-west-1 Replica: ap-southeast-1 ~5s propagation to all replica regions]\n\n[product_overview::1] container for a team's files, members, and shared links. Each account on\nthe Free plan may create at most 1 Workspace; paid plans allow unlimited\nWorkspaces.\nReal-time co-editing is available for Nimbus Docs and Nimbus Sheets. Up to\n50 users can edit the same document simultaneously before Nimbus switches\nthe document to read-only mode for additional viewers.\nThe desktop sync client is available for macOS, Windows, and Linux. It\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level",
       "sources": [
         "troubleshooting::0",
-        "product_overview::5",
-        "troubleshooting::1",
-        "onboarding_guide::2"
+        "product_overview::3",
+        "product_overview::1",
+        "product_overview::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, which states that a file with an unsupported character in its name causes the Nimbus sync client to get stuck on 'Syncing...'. The list of unsupported characters is also directly supported by the context.",
+      "faithfulness_reasoning": "The answer directly quotes the context, which states that a file with an unsupported character in its name (specifically one of the following: `\\ / : * ? < > |`) causes the Nimbus sync client to get stuck on 'Syncing...'.",
       "unsupported_claims": [],
       "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question by providing a specific cause for the Nimbus sync client getting stuck on 'Syncing...'. It identifies a particular issue (a file with an unsupported character in its name) as the typical cause of the problem.",
+      "relevancy_reasoning": "The answer directly addresses the question by providing a specific cause for the Nimbus sync client getting stuck on 'Syncing...'. It identifies a particular type of file as the culprit, giving a clear and complete explanation.",
       "flagged": false
     },
     {
       "id": "q20",
       "question": "What usually causes an SSO login loop on Nimbus Business or Enterprise plans?",
       "expected_answer": "Clock skew greater than 5 minutes between the identity provider and Nimbus's SAML validation service.",
-      "raw_answer": "I don't know. The context does not mention what causes an SSO login loop on Nimbus Business or Enterprise plans.",
-      "context": "[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[pricing::3] All paid plans include a 14-day free trial. No credit card is required to\nstart a trial on Nimbus Team; Nimbus Business and Enterprise trials require\na sales contact.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\n\n[troubleshooting::0] Troubleshooting\n**Sync client stuck on \"Syncing...\"** \u2014 This is usually caused by a file\nwith an unsupported character in its name (Nimbus disallows `\\ / : * ?",
+      "raw_answer": "A clock skew greater than 5 minutes between the identity provider and Nimbus's clock.",
+      "context": "[security_and_compliance::0] Security and Compliance\nNimbus encrypts all files at rest using AES-256. Data in transit is\nencrypted with TLS 1.2 or higher; connections that only support TLS 1.0 or\n1.1 are rejected by the edge load balancer.\nNimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts.\n\n[troubleshooting::1] the desktop client or the chunked upload API, both of which split the\nfile automatically.\n**Co-editing shows \"switched to read-only\"** \u2014 This happens when a\ndocument exceeds the 50 simultaneous editor limit. Additional users are\ndowngraded to viewers until an active editor's session ends.\n**SSO login loop on Business/Enterprise** \u2014 Usually caused by a clock\nskew greater than 5 minutes between the identity provider and Nimbus's\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from\n\n[troubleshooting::0] Troubleshooting\n**Sync client stuck on \"Syncing...\"** \u2014 This is usually caused by a file\nwith an unsupported character in its name (Nimbus disallows `\\ / : * ? \"\n< > |`). Check the sync log at `~/.nimbus/sync.log` (macOS/Linux) or\n`%APPDATA%\\Nimbus\\sync.log` (Windows) for a line containing\n`SKIPPED_INVALID_NAME`.\n**Uploads failing with ERR_413_TOO_LARGE** \u2014 The standard upload endpoint\nrejects files over 5 GB. Files larger than 5 GB must be uploaded through",
       "sources": [
-        "security_and_compliance::1",
-        "pricing::3",
+        "security_and_compliance::0",
+        "troubleshooting::1",
         "onboarding_guide::0",
         "troubleshooting::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer states that the context does not mention what causes an SSO login loop, which is a direct and accurate reflection of the provided context, with no invention or unsupported extrapolation.",
+      "faithfulness_reasoning": "The answer directly quotes the context, which states that an SSO login loop on Business/Enterprise is 'Usually caused by a clock skew greater than 5 minutes between the identity provider and Nimbus's'.",
       "unsupported_claims": [],
-      "relevancy_score": 0,
-      "relevancy_reasoning": "The answer explicitly states it does not know the cause of an SSO login loop on Nimbus Business or Enterprise plans, thus it does not address the question at all.",
+      "relevancy_score": 5,
+      "relevancy_reasoning": "The answer directly addresses the question by providing a specific cause of an SSO login loop on Nimbus Business or Enterprise plans, which is a clock skew greater than 5 minutes between the identity provider and Nimbus's clock.",
       "flagged": false
     },
     {
       "id": "q21",
       "question": "Can an Enterprise customer migrate their primary data to a different region after their Workspace is created?",
       "expected_answer": "No, primary data cannot be migrated across regions automatically; a new Workspace must be created in the target region and files copied over manually.",
-      "raw_answer": "No, according to the context, once a Workspace is created in a region, its primary data cannot be migrated to a different region; a new Workspace must be created and files copied over manually.",
-      "context": "[troubleshooting::2] Syncing the IdP server clock via NTP resolves most cases. **Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\n\n[security_and_compliance::1] Nimbus Business and Enterprise plans support single sign-on (SSO) through\nSAML 2.0. SCIM-based user provisioning is available on Enterprise only,\nletting an identity provider automatically create, update, and deactivate\nNimbus accounts. Nimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal. Enterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[onboarding_guide::2] Nimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[pricing::2] **Nimbus Enterprise** \u2014 custom pricing. Includes unlimited storage,\ndedicated customer success manager, custom data retention policies, and a\n99.95% uptime SLA with financial credits for downtime beyond the SLA. Annual plans can be upgraded at any time with a prorated charge for the\nremainder of the billing cycle. Downgrades take effect at the start of the\nnext billing cycle; Nimbus does not issue partial refunds for downgrades.",
+      "raw_answer": "No, an Enterprise customer cannot migrate their primary data to a different region after their Workspace is created. According to the context, once a Workspace is created in a region, its primary data cannot be migrated to a different region; a new Workspace must be created and files copied over manually.",
+      "context": "[security_and_compliance::1] Nimbus accounts.\nNimbus holds SOC 2 Type II certification, renewed annually, and is GDPR\ncompliant for customers storing data in the EU region. Customers may\nrequest a Data Processing Addendum (DPA) from the billing portal.\nEnterprise customers may choose a data residency region at signup: US,\nEU, or APAC. Once a Workspace is created in a region, its primary data\ncannot be migrated to a different region; a new Workspace must be created\nand files copied over manually.\n\n[troubleshooting::2] SAML validation service, which rejects assertions outside that window.\nSyncing the IdP server clock via NTP resolves most cases.\n**Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\nFor issues not covered here, contact support through the in-app chat\n\n[onboarding_guide::1] Workspace Settings > Members.\nNew members invited by email receive a link valid for 7 days. If the\ninvite link expires, an admin must resend it from the Members page; there\nis no way for an invited user to self-request a new link.\nNimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from",
       "sources": [
-        "troubleshooting::2",
         "security_and_compliance::1",
-        "onboarding_guide::2",
-        "pricing::2"
+        "troubleshooting::2",
+        "onboarding_guide::1",
+        "onboarding_guide::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly quotes the context, specifically the security_and_compliance section, which states that 'Once a Workspace is created in a region, its primary data cannot be migrated to a different region; a new Workspace must be created and files copied over manually.' This shows that the answer is entirely grounded in the provided context with no invention or unsupported extrapolation.",
+      "faithfulness_reasoning": "The answer directly quotes and supports its claim from the provided context, specifically stating that 'once a Workspace is created in a region, its primary data cannot be migrated to a different region; a new Workspace must be created and files copied over manually.' This shows that every claim in the answer is directly supported by the context.",
       "unsupported_claims": [],
       "relevancy_score": 5,
-      "relevancy_reasoning": "The answer directly addresses the question by stating that an Enterprise customer cannot migrate their primary data to a different region after their Workspace is created and provides the necessary workaround.",
+      "relevancy_reasoning": "The answer directly addresses the question, providing a clear and concise response regarding the ability of an Enterprise customer to migrate their primary data to a different region after their Workspace is created.",
       "flagged": false
     },
     {
@@ -438,15 +440,15 @@
       "question": "Which regions does the Nimbus sync engine operate across?",
       "expected_answer": "us-east-1, eu-west-1, and ap-southeast-1 (from the architecture diagram).",
       "raw_answer": "us-east-1, eu-west-1, and ap-southeast-1.",
-      "context": "[product_overview::5] [Image on page 1: Primary: us-east-1 Desktop Sync Nimbus Edge API Replica: Client (Sync Engine v3) eu-west-1 Replica: ap-southeast-1 ~5s propagation to all replica regions]\n\n[troubleshooting::2] Syncing the IdP server clock via NTP resolves most cases. **Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\n\n[onboarding_guide::2] Nimbus recommends installing the desktop sync client during onboarding so\nthat an existing local folder of files can be imported directly into a\nWorkspace. Imported files preserve their original last-modified\ntimestamps but are re-versioned as new files in Nimbus.",
+      "context": "[product_overview::3] [Image on page 1: Primary: us-east-1 Desktop Sync Nimbus Edge API Replica: Client (Sync Engine v3) eu-west-1 Replica: ap-southeast-1 ~5s propagation to all replica regions]\n\n[troubleshooting::2] SAML validation service, which rejects assertions outside that window.\nSyncing the IdP server clock via NTP resolves most cases.\n**Missing files after a region migration** \u2014 As noted in the security\ndocumentation, Nimbus does not migrate primary data across regions\nautomatically; files must be manually copied into a new Workspace created\nin the target region.\nFor issues not covered here, contact support through the in-app chat\n\n[product_overview::0] Nimbus Overview\nNimbus is a cloud file storage and collaboration platform for teams. It lets\nusers upload, organize, and co-edit documents, spreadsheets, and design\nfiles from a browser or the desktop sync client.\nEvery file uploaded to Nimbus is automatically versioned. Nimbus keeps the\nlast 100 versions of a file, or 30 days of history, whichever is greater.\nOlder versions are pruned by a nightly cleanup job.\nNimbus organizes content into Workspaces. A Workspace is the top-level\n\n[onboarding_guide::0] Onboarding Guide\nTo create a new Nimbus Workspace, sign up at nimbus.example.com/signup\nwith a work email address. Personal email domains such as gmail.com are\nallowed on the Free plan but are blocked when creating a Business or\nEnterprise Workspace, which require a verified company domain.\nAfter signup, the setup wizard walks through three steps: naming the\nWorkspace, inviting teammates by email, and connecting the desktop sync\nclient. Inviting teammates is optional and can be done later from",
       "sources": [
-        "product_overview::5",
+        "product_overview::3",
         "troubleshooting::2",
         "product_overview::0",
-        "onboarding_guide::2"
+        "onboarding_guide::0"
       ],
       "faithfulness_score": 5,
-      "faithfulness_reasoning": "The answer directly mentions the regions supported by the Nimbus sync engine, which are explicitly listed in the context as us-east-1, eu-west-1, and ap-southeast-1.",
+      "faithfulness_reasoning": "The answer directly mentions the regions 'us-east-1', 'eu-west-1', and 'ap-southeast-1' which are supported by the context provided in the product overview section, specifically the image description on page 1.",
       "unsupported_claims": [],
       "relevancy_score": 5,
       "relevancy_reasoning": "The answer directly lists the regions where the Nimbus sync engine operates, fully addressing the question.",

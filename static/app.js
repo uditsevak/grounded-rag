@@ -26,7 +26,7 @@ const pipelineNote = document.getElementById("pipeline-note");
 
 const RANK_LABEL = { hybrid: "fusion", dense: "cosine similarity", sparse: "BM25 score" };
 
-const DEMO_CORPUS_TEXT = "6 documents · 27 chunks · dense FAISS + sparse BM25";
+const DEMO_CORPUS_TEXT = "6 documents · 21 chunks · dense FAISS + sparse BM25";
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
 // upload elements
